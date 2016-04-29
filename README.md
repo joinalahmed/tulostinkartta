@@ -1,4 +1,3 @@
-=== Tulostinkartta ===
 3D-Tulostimen omistajat voivat lisätä tulostimensa Tulostinkartalle, jonka jälkeen heille voi lähettää STL-tiedostoja tulostettavaksi ja maksaa tulostustyöt bitcoineilla. 
 
 Tulostinkartan oma koodi on Tulostinkartta-plugarissa ja Tulostinkartan lapsiteemassa.
