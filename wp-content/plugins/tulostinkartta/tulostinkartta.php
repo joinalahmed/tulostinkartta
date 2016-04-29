@@ -40,29 +40,6 @@ function tulostinkartta_plugin_image_tabs($tabs) {
 }}}
 */
 
-
-/*
-add_filter('wp_handle_upload_prefilter', 'tulostinkartta_upload_filter' );
-
-function tulostinkartta_upload_filter( $file ) {
-   global $wpdb, $bp;
-   global $post;
-   global $user_ID;
-  if(get_post_type($_REQUEST['post_id']) == 'tulostuspyynto') {
-    include_once (__ROOT__./wp-content/plugins/tulostinkartta/STLStats.php');   
-    $upload_dir = wp_upload_dir(); 
-    $mypath = $upload_dir['path'] . "/" . $file['name']; 
-    $obj = new STLStats($mypath);
-    $unit = "cm";
-    $volyymi = $obj->getVolume($unit);
-    mail('tomi@flossmanuals.net', 'tiedosto', $volyymi); 
-    $postinumero = $_REQUEST['post_id'];
-    update_post_meta($postinumero, "volyymi", $volyymi);
-  }
-    return $file;
-}
-*/
-
 /* Tämä on ongelma josta pääsee eroon pods.io:lla */
 /*
 add_filter( 'user_has_cap', 'tulostin_unfiltered_upload' );
