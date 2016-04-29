@@ -730,13 +730,6 @@ function tt_register_btc($user_id) {
   tt_update_kurssi();
 }
 
-function tt_login_btc($user_login, $user) {
-  tt_blockio_accounts();
-  tt_blockio_balances();
-  tt_update_kurssi();
-}
-add_action('wp_login', 'tt_login_btc', 10, 2);
-
 /* WordPress päivittämään tilejä kerran tunnissa */
 
 add_action( 'wp', 'tulostinkartta_setup_schedule' );
@@ -748,7 +741,6 @@ function tulostinkartta_setup_schedule() {
 
 add_action( 'tulostinkartta_hourly_event', 'tulostinkartta_do_this_hourly' );
 function tulostinkartta_do_this_hourly() {
-  tulostinkartta_notifikaatio_botti();
   tt_blockio_accounts();
   tt_blockio_balances();
   tt_update_kurssi();
