@@ -190,52 +190,5 @@ function filamentti_restrict_admin() {
     }
 }
 */
-/* Vaihdetaan tilausten default status */
-/*
-add_action( 'woocommerce_thankyou', 'filamentti_woocommerce_tilaus_status' );
-function filamentti_woocommerce_tilaus_status( $order_id ) {
-  global $woocommerce;
-  if ( !$order_id )
-    return;
-  $order = new WC_Order( $order_id );
-  $order->update_status( 'on-hold' );
-}
-*/
-/*
-add_filter( 'user_has_cap', 'filamentti_unfiltered_upload' );
-
-function filamentti_unfiltered_upload( $caps )
-{
-  $caps['unfiltered_upload'] = 1;
-  return $caps;
-}
-
-function tulostin_upload_mimes($mimes=array()) {
-  $mimes['stl']='application/octet-stream.stl';
-  return $mimes;
-}
-add_filter("upload_mimes","tulostin_upload_mimes");
-
-function tulostin_map_unrestricted_upload_filter($caps, $cap) {
-  if ($cap == 'unfiltered_upload') {
-    $caps = array();
-    $caps[] = $cap;
-  }
-
-  return $caps;
-}
-
-add_filter('map_meta_cap', 'tulostin_map_unrestricted_upload_filter', 0, 2);
-
-function filamentti_login_logo() { ?>
-    <style type="text/css">
-    .login h1 a {
-    background-image: url(<?php echo get_stylesheet_directory_uri(); ?>/images/site-login-logo.png);
-    padding-bottom: 30px;
-  }
-    </style>
-	<?php }
-add_action( 'login_enqueue_scripts', 'filamentti_login_logo' );
-*/
 
 ?>
