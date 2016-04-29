@@ -9,27 +9,6 @@ wp_enqueue_style( 'custom-community', get_template_directory_uri() . '/style.css
 @ini_set( 'max_execution_time', '300' );
 
 /*
-function filamentti_translate( $content ) {
-  $content = preg_replace("/Product Categories/", "Tuotteiden luokat", $content );
-  $content = preg_replace("/Featured Products/", "KÃ¤rkituotteet", $content );
-  $content = preg_replace("/Recent Products/", "Uudet tuotteet", $content );
-  $content = preg_replace("/Search Products/", "Tuotehaku", $content );
-  $content = preg_replace("/Checkout/", "Kassalle", $content );
-  $content = preg_replace("/items/", "tuotetta", $content );
-  $content = preg_replace("/City/", "Postitoimipaikka", $content );
-  $content = preg_replace("/Driving distance/", "AjoetÃ¤isyys", $content );
-  return $content;
-}
-add_filter( 'the_content', 'filamentti_translate' );
-*/
-/*
-function do_not_send_some_email_notifications(WC_Emails $wc_emails) {
-  remove_action('woocommerce_order_status_completed_notification', array($wc_emails->emails['WC_Email_Customer_Completed_Order'], 'trigger'));
-}
-add_action('woocommerce_email', 'do_not_send_some_email_notifications');
-*/
-
-/*
 add_filter('upload_mimes', 'tulostinkartta_custom_upload_mimes');
 function tulostinkartta_custom_upload_mimes ( $existing_mimes=array() ) {
   unset( $existing_mimes['stl'] );

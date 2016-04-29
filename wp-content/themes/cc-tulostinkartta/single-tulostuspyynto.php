@@ -27,7 +27,7 @@ get_header(); ?>
                     <?php while ( have_posts() ) : the_post(); ?>
 
 
-<?php printjob_page(); ?>
+                    <?php printjob_page(); ?>
 
                     			  
   		    <?php endwhile; ?>                  
