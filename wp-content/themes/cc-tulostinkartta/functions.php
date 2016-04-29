@@ -237,36 +237,5 @@ function filamentti_login_logo() { ?>
 	<?php }
 add_action( 'login_enqueue_scripts', 'filamentti_login_logo' );
 */
-function remove_now_gmw_homostelu() {    
-
-    $post = get_post();
-    $postiljooni = $post->ID;
-    
-/*    if($_SERVER['REQUEST_URI'] === '/omatulostin/' or '/omatulostin/?updated=true') { */
-    /*    if($_SERVER['REQUEST_URI'] === '/omatulostin/' or '/omatulostin/?updated=true') { */
-
-
-if($postiljooni === 4199) { 
-     wp_dequeue_script('gmw-google-autocomplete');
-     wp_dequeue_script('gmw-js');
-     wp_dequeue_script('gmw-marker-clusterer');
-     wp_dequeue_script('gmw-marker-spiderfier');
-     wp_dequeue_script('gmw-infobox');
-     wp_dequeue_script('gmw-get-directions');
-     wp_dequeue_script('jquery-ui-draggable');
-     wp_dequeue_script('google-maps');
-    } 
-if($postiljooni === 4201) {
-     wp_enqueue_script( 'gmw-google-autocomplete' );
-     wp_enqueue_script( 'gmw-js' );
-     wp_enqueue_script( 'gmw-marker-clusterer' );
-     wp_enqueue_script( 'gmw-marker-spiderfier' );
-     wp_enqueue_script( 'gmw-infobox' );
-     wp_enqueue_script( 'gmw-get-directions' );
-     wp_enqueue_script( 'jquery-ui-draggable' );
-     wp_enqueue_script( 'google-maps' );
-    } 
- }
-add_action('wp_head', 'remove_now_gmw_homostelu', 1);
 
 ?>
