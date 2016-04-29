@@ -17,24 +17,25 @@
 		<link rel="profile" href="http://gmpg.org/xfn/11" />
 		<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
 <?php wp_head(); ?>
-<script type='text/javascript' src='http://sekotavarakauppa.fi/wp-content/plugins/3dprint/includes/js/3dprint-frontend.js'></script>
-<script type='text/javascript' src='http://sekotavarakauppa.fi/wp-content/plugins/3dprint/includes/js/3dprint-backend.js'></script>
+        
+        <script type='text/javascript' src='.../wp-content/plugins/3d-printing-fork/includes/js/3dprint-frontend.js'></script>
+        <script type='text/javascript' src='.../wp-content/plugins/3d-printing-fork/includes/js/3dprint-backend.js'></script>
 
-<?php $post_type = get_post_type($post);
-if ( is_single() &&  $post_type == 'tulostin' ) { 
-echo '<meta name="geo.placename" content="' . get_post_meta( get_the_ID(), 'formatted_address', true ) . '" />';
-echo '<meta name="geo.position" content="' . get_post_meta( get_the_ID(), 'lat', true ) . ';' . get_post_meta( get_the_ID(), 'long', true) . '" />';
-echo '<meta name="geo.region" content="FI-" />';
-echo '<meta name="ICBM" content="' . get_post_meta( get_the_ID(), 'lat', true ) . ';' . get_post_meta( get_the_ID(), 'long', true) . '" />';
-echo '<meta property="og:title" content="' . get_the_title() . '" />
-<meta property="og:type" content="place" />
-<meta property="og:url" content="' . get_permalink() . '" />
-<meta property="og:site_name" content="3D-Tarvike Tulostinkartta" />
-<meta property="og:description" content="Tulosta kolmiulotteiset tulostustyösi Tulostuskartan avulla!" />
-<meta property="og:image" content="' . wp_get_attachment_url( get_post_thumbnail_id($post->ID)) . '" />';
-echo '<meta property="og:latitude" content="' . get_post_meta( get_the_ID(),'lat', true ) . '" />';
-echo '<meta property="og:longitude" content="' . get_post_meta( get_the_ID(),'long', true ) . '" />';
-}; ?>
+        <?php $post_type = get_post_type($post);
+              if ( is_single() &&  $post_type == 'tulostin' ) { 
+                echo '<meta name="geo.placename" content="' . get_post_meta( get_the_ID(), 'formatted_address', true ) . '" />';
+                echo '<meta name="geo.position" content="' . get_post_meta( get_the_ID(), 'lat', true ) . ';' . get_post_meta( get_the_ID(), 'long', true) . '" />';
+                echo '<meta name="geo.region" content="FI-" />';
+                echo '<meta name="ICBM" content="' . get_post_meta( get_the_ID(), 'lat', true ) . ';' . get_post_meta( get_the_ID(), 'long', true) . '" />';
+                echo '<meta property="og:title" content="' . get_the_title() . '" />
+                <meta property="og:type" content="place" />
+                <meta property="og:url" content="' . get_permalink() . '" />
+                <meta property="og:site_name" content="3D-Tarvike Tulostinkartta" />
+                <meta property="og:description" content="Tulosta kolmiulotteiset tulostustyösi Tulostuskartan avulla!" />
+                <meta property="og:image" content="' . wp_get_attachment_url( get_post_thumbnail_id($post->ID)) . '" />';
+                echo '<meta property="og:latitude" content="' . get_post_meta( get_the_ID(),'lat', true ) . '" />';
+                echo '<meta property="og:longitude" content="' . get_post_meta( get_the_ID(),'long', true ) . '" />';
+              }; ?>
         
 </head>
 
