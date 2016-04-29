@@ -25,49 +25,9 @@ License: GPL2
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/*
-add_filter('media_upload_tabs', 'tulostinkartta_plugin_image_tabs', 99);
- 
-function tulostinkartta_plugin_image_tabs($tabs) {
-       if (isset($_REQUEST['post_id'])) {
-       $post_type = get_post_type($_REQUEST['post_id']);
-       if ('tulostuspyynto' == $post_type) {
-       unset($tabs['type']);
-       unset($tabs['type_url']); 
-       unset($tabs['gallery']);        
-       unset($tabs['library']);
-       return($tabs); 
-}}}
-*/
-
-/* Tämä on ongelma josta pääsee eroon pods.io:lla */
-/*
-add_filter( 'user_has_cap', 'tulostin_unfiltered_upload' );
-
-function tulostin_unfiltered_upload( $caps ) {
-	$caps['unfiltered_upload'] = 1;
-	return $caps;
-}
-
-function tulostin_activate() {
-	flush_rewrite_rules();
-}
-register_activation_hook( __FILE__, 'tulostin_activate' );
-
-function tulostin_deactivate() {
-	flush_rewrite_rules();
-}
-register_deactivation_hook( __FILE__, 'tulostin_deactivate' );
-
-add_filter( "upload_mimes", "tulostin_custom_upload_mimes" );
-function tulostin_custom_upload_mimes( $existing_mimes ) {
-	$existing_mimes["stl"] = "application/octet-stream";
-	return $existing_mimes;
-}
-*/
-add_action( 'admin_menu', 'tulostin_register_kartta_menu_page' );
-
 /* Valikkosivusta ei ole juuri nyt mitään hyötyä */
+
+add_action( 'admin_menu', 'tulostin_register_kartta_menu_page' );
 
 function tulostin_register_kartta_menu_page() {
 	add_menu_page( 'Tulostinkartta', 'Tulostinkartta', 'edit_plugins', 'tulostin_kartta', 'tulostin_kartta_menu_page' );
