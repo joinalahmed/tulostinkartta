@@ -617,23 +617,6 @@ function printjob_valmis() {
 function printjob_peruutettu() {
 }
 
-/* Turha funktio Block_IO:n testaamiseen */
-
-function tt_coinbase_test() {
-    global $wpdb;
-    require_once(__ROOT__.'/wp-content/plugins/tulostinkartta/block_io.php'); 
-    $apiKey = get_option( 'blockio_api_key' );  
-    $version = 2; 
-    $pin = get_option( 'blockio_pin' );    
-    $block_io = new BlockIo($apiKey, $pin, $version);
-    $accountbalance = $block_io->get_current_price(array('price_base' => 'EUR'));
-    $accountbalance = $accountbalance->data->prices;
-    $accountbalance = $accountbalance[0]; 
-    $accountbalance = $accountbalance->price;
-    echo var_dump($accountbalance);
-    update_option("btc_kurssi", $accountbalance); 
-}
-
 /* Haetaan Bitcoinin kurssi Block.io:sta */
 
 function tt_update_kurssi() {
