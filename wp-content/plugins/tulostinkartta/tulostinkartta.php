@@ -35,8 +35,6 @@ function tulostin_register_kartta_menu_page() {
 
 function tulostin_kartta_menu_page() {
 	echo "<h1>Karttaplugari</h1>";
-	tt_blockio_balances();
-	tt_blockio_accounts();
 }
 
 /* Lisätään 3D-filamentit taksonomiaksi */
@@ -204,78 +202,6 @@ function remove_admin_bar() {
 		show_admin_bar( false );
 	}
 }
-*/
-
-/* Geokoodataan tulostimien sijainnit kartalle tulostinsivuja päivitettäessä */ 
-
-/*
-function gmw_update_location_filamentti( $post_id, $post, $update ) {
-	   global $wpdb, $bp;
-	   global $post;
-	   global $user_ID;
-
-	   $post = get_post( $post_id );
-
-	   $slug = 'tulostin';
-	   if ( $slug != $post->post_type ) {
-		  return;
-	   }
-	    $contact_tulostaja = get_post( $post_id );
-	    $contact_tulostaja = $contact_tulostaja->post_author;
-
-	    $table_name = "wppl_friends_locator";
-
-	    $data = $wpdb->get_results( "SELECT * FROM " . $table_name . " WHERE member_id='" . $contact_tulostaja . "'" );
-
-	    $data = $data[0];
-	    $address = $data->address;
-	    $lat = $data->lat;
-	    $long = $data->long;
-	    $street = $data->street;
-	    $zipcode = $data->zipcode;
-	    $country = $data->country;
-	    $country_long = $data->country_long;
-	    $state = $data->state;
-	    $state_long = $data->state_long;
-	    $formatted_address = $data->formatted_address;
-
-  	    $osoite = bp_get_profile_field_data("field=Osoite&user_id=" . $contact_tulostaja);
-
-        update_post_meta($post_id, 'osoite', $osoite);
-        update_post_meta($post_id, 'formatted_address', $formatted_address);   
-        update_post_meta($post_id, 'address', $address);
-        update_post_meta($post_id, 'lat', $lat);
-        update_post_meta($post_id, 'long', $long);
-        update_post_meta($post_id, 'street', $street);
-        update_post_meta($post_id, 'zipcode', $zipcode);
-        update_post_meta($post_id, 'country', $country);
-        update_post_meta($post_id, 'country_long', $country_long);
-        update_post_meta($post_id, 'state', $state);
-        update_post_meta($post_id, 'state_long', $state_long);
-
-	    include_once (__ROOT__.'/wp-content/plugins/geo-my-wp/plugins/posts/includes/gmw-pt-update-location.php');
-
-	if ( function_exists( 'gmw_pt_update_location' ) ) {
-		$args = array(
-			'post_id'         => $post_id,
-			'post_type'       => 'tulostin',
-			'post_title'      => get_the_title( $post_id ),
-			'address'         => $address,
-			'lat'               => $lat,
-			'long'              => $long,
-			'street'              => $street,
-			'formatted_address' => $formatted_address,
-			'zipcode'           => $zipcode,
-			'country'           => $country,
-			'country_long'      => $country_long,
-			'state'           => $state,
-			'state_long'      => $state_long,
-			'post_status'       => 'publish',
-		);
-		gmw_pt_update_location( $args );
-	}
-}
-add_action( 'save_post', 'gmw_update_location_filamentti', 10, 1 );
 */
 
 /* Geokoodataan käyttäjien sijainnit osoite-profiilikentän perusteella */
