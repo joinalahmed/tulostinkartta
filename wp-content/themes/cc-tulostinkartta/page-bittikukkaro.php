@@ -29,11 +29,8 @@
                 <div id="content" class="<?php echo apply_filters( 'cc2_content_class', $content_class ); ?>">
 
                     <?php do_action( 'cc_first_inside_main_content_inner'); ?>
-		    <?php tulostinkartta_bittikukkaro(); ?>
-
-
 		    
-
+                    <?php tulostinkartta_bittikukkaro(); ?>
                     
                 </div><!-- close #content -->
 
