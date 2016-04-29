@@ -118,32 +118,7 @@ function filamentti_viitenumero_laskuri($order_id) {
   }
 }
 */
-/*
-function filamentti_slogan() {
-$num = Rand (1,6);
-switch ($num)
-  {
-  case 1:
-    $slogan = "Filamentti on unelmiesi materiaali.";
-    break;
-  case 2:
-    $slogan = "Tulosta ajatuksesi.";
-    break;
-  case 3:
-    $slogan = "Tulevaisuus on nyt.";
-    break;
-  case 4:
-    $slogan = "Kolmiulotteinen tulostaminen on uusi teollinen vallankumous.";
-    break;
-  case 5:
-    $slogan = "Kaiken tiedon pitÃ¤Ã¤ olla avointa.";
-    break;
-  case 6:
-    $slogan = "Tuotannon yhteisÃ¶llisyyttÃ¤.";
-  }
-echo $slogan;
-}
-*/
+
 /*
 add_action( 'init', 'filamentti_blockusers_init' );
 function filamentti_blockusers_init() {
