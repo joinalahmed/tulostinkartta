@@ -9,34 +9,6 @@ wp_enqueue_style( 'custom-community', get_template_directory_uri() . '/style.css
 @ini_set( 'max_execution_time', '300' );
 
 /*
-add_filter('upload_mimes', 'tulostinkartta_custom_upload_mimes');
-function tulostinkartta_custom_upload_mimes ( $existing_mimes=array() ) {
-  unset( $existing_mimes['stl'] );
-  $existing_mimes['stl'] = 'application/octet-stream.stl';
-  return $existing_mimes;
-}
-*/
-/*
-add_filter("upload_mimes", "filamentti_custom_upload_mimes");
-function filamentti_custom_upload_mimes($existing_mimes) {
-  $existing_mimes["stl"] = "application/octet-stream";
-  return $existing_mimes;
-}
-
-function tt_myme_types($mime_types){
-    $mime_types['stl'] = 'application/vnd.ms-pkistl';
-    return $mime_types;
-}
-add_filter('upload_mimes', 'tt_myme_types', 1, 1);
-
-add_filter('upload_mimes', 'tt_custom_upload_mimes');
-function tt_custom_upload_mimes ( $existing_mimes=array() ) {
-  $existing_mimes['deb'] = 'application/x-deb';
-  $existing_mimes['stl'] = 'application/vnd.ms-pkistl';
-  return $existing_mimes;
-}
-*/
-/*
 add_filter ( 'pdf_content_additional_content' , 'pdf_additional_content_terms' );
 function pdf_additional_content_terms( $content ) {
 global $woocommerce;
