@@ -91,33 +91,6 @@ function filamentti_admin_bar_render() {
 add_action( 'wp_before_admin_bar_render', 'filamentti_admin_bar_render' );
 */
 
-/* Viitenumero  */
-/*
-add_action('woocommerce_checkout_order_processed', 'filamentti_viitenumero_laskuri');
-
-function filamentti_viitenumero_laskuri($order_id) {
-  global $woocommerce;
-  $order = new WC_Order( $order_id );
-  $maksutapa = get_post_meta( $order->id, '_payment_method', true);
-  if ($maksutapa = "bacs") {
-  $lasku = $order->id;
-  $laskunro = $lasku+100;
-  $kertoimet = array('7','3','1','7','3','1','7','3','1','7','3','1','7','3','1','7','3','1','7');
-  $tarkiste = 0;
-  $j = 0;
-  $tmp = $laskunro;
-  settype($tmp, "string");
-  for($i=strlen($tmp)-1; $i>-1; $i--){
-    $tarkiste = $tarkiste + $kertoimet[$j++] * intval(substr($tmp, $i, 1));
-  }
-  $tarkiste = ceil($tarkiste / 10) * 10 - $tarkiste;
-  $viite = "$laskunro$tarkiste";
-  update_post_meta($lasku, "viitenumero", $viite);
-  $mailer = $woocommerce->mailer();
-  $mailer->customer_invoice( $order );
-  }
-}
-*/
 
 /*
 add_action( 'init', 'filamentti_blockusers_init' );
