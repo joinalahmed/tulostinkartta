@@ -81,6 +81,7 @@ Thumbs.db
 *.rar
 *.tar
 *.zip
+*.po~
 
 # ignore everything in the "wp-content" directory, except:
 # "mu-plugins" directory
