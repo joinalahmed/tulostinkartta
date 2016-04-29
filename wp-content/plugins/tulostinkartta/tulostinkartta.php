@@ -192,34 +192,6 @@ function tulostuspyynto_post_type() {
 }
 add_action( 'init', 'tulostuspyynto_post_type', 0 );
 
-/* Poistetaan GMW:n ylimääräiset Google Maps -scriptit sivuilta joilla niitä ei tarvita */
-
-/*
-function remove_gmw_homostelu() {
-if(preg_match($_SERVER['REQUEST_URI'], '/omatulostin/')) {
-     wp_dequeue_script('gmw-google-autocomplete');
-     wp_dequeue_script('gmw-js');
-     wp_dequeue_script('gmw-marker-clusterer');
-     wp_dequeue_script('gmw-marker-spiderfier');
-     wp_dequeue_script('gmw-infobox');
-     wp_dequeue_script('gmw-get-directions');
-     wp_dequeue_script('jquery-ui-draggable');
-     wp_dequeue_script('google-maps');
-    } 
-if(preg_match($_SERVER['REQUEST_URI'], '/tulostinkartta/')) {
-     wp_enqueue_script( 'gmw-google-autocomplete' );
-     wp_enqueue_script( 'gmw-js' );
-     wp_enqueue_script( 'gmw-marker-clusterer' );
-     wp_enqueue_script( 'gmw-marker-spiderfier' );
-     wp_enqueue_script( 'gmw-infobox' );
-     wp_enqueue_script( 'gmw-get-directions' );
-     wp_enqueue_script( 'jquery-ui-draggable' );
-     wp_enqueue_script( 'google-maps' );
-    } 
-}
-add_action('wp_head', 'remove_gmw_homostelu', 1);
-*/
-
 /* Tulostuspyyntösivulle pääsy vain lähettäjälle ja vastaanottajalle */
 
 function printjob_page() {
