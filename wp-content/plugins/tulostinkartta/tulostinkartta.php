@@ -39,6 +39,8 @@ function tulostin_kartta_menu_page() {
 	tt_blockio_accounts();
 }
 
+/* Lisätään 3D-filamentit taksonomiaksi */
+
 function materiaali_taxonomy() {
 
 	$labels = array(
@@ -72,6 +74,8 @@ function materiaali_taxonomy() {
 
 add_action( 'init', 'materiaali_taxonomy', 0 );
 
+/* Lisätään 3D-tulostinmallit taksonomiaksi */
+
 function tulostinmalli_taxonomy() {
 
 	$labels = array(
@@ -103,6 +107,8 @@ function tulostinmalli_taxonomy() {
 	register_taxonomy( 'tulostinmalli', array( 'tulostin' ), $args );
 }
 add_action( 'init', 'tulostinmalli_taxonomy', 0 );
+
+/* Lisätään 3D-tulostinsivut custom post typeksi */
 
 if ( ! function_exists( 'filamentti_tulostin_post' ) ) {
 
@@ -147,6 +153,8 @@ if ( ! function_exists( 'filamentti_tulostin_post' ) ) {
 	add_action( 'init', 'filamentti_tulostin_post', 0 );
 }
 
+/* Lisätään tulostuspyyntö custom post typeksi */
+
 function tulostuspyynto_post_type() {
 
 	$labels = array(
@@ -186,6 +194,8 @@ function tulostuspyynto_post_type() {
 }
 add_action( 'init', 'tulostuspyynto_post_type', 0 );
 
+/* Admin bar piiloon epäadmineilta */
+
 /*
 add_action( 'after_setup_theme', 'remove_admin_bar' );
 
@@ -195,6 +205,8 @@ function remove_admin_bar() {
 	}
 }
 */
+
+/* Geokoodataan tulostimien sijainnit kartalle tulostinsivuja päivitettäessä */ 
 
 /*
 function gmw_update_location_filamentti( $post_id, $post, $update ) {
@@ -265,6 +277,9 @@ function gmw_update_location_filamentti( $post_id, $post, $update ) {
 }
 add_action( 'save_post', 'gmw_update_location_filamentti', 10, 1 );
 */
+
+/* Geokoodataan käyttäjien sijainnit osoite-profiilikentän perusteella */
+
 /*
 function kartta_profiili_updated($user_id) {
   global $wpdb, $bp;
@@ -325,7 +340,7 @@ function kartta_profiili_updated($user_id) {
       update_user_meta($user_id, 'country', $country);
       update_user_meta($user_id, 'address', $sijainti);
     
-      include_once('/var/www/html/wp-content/plugins/geo-my-wp/plugins/posts/includes/gmw-fl-update-location.php' );
+      require_once(__ROOT__.'/wp-content/plugins/geo-my-wp/plugins/posts/includes/gmw-fl-update-location.php');
 
       $wpdb->replace('wppl_friends_locator', array(
             'member_id'         => $user_id,
@@ -336,7 +351,6 @@ function kartta_profiili_updated($user_id) {
             'formatted_address' => $formatted_address,
             'lat'               => $latitude,
             'long'              => $longitude));
-																																										        
     }
   }
 }
@@ -348,9 +362,7 @@ add_filter( 'option_active_plugins', 'tt_disable_gmw_plugin' );
 function tt_disable_gmw_plugin($plugins){
 
 if($_SERVER['REQUEST_URI'] === '/omatulostin/') {
-
         $key = array_search( 'geo-my-wp/geo-my-wp.php' , $plugins );
-
         if ( false !== $key ) {
             unset( $plugins[$key] );
         }
@@ -358,6 +370,9 @@ if($_SERVER['REQUEST_URI'] === '/omatulostin/') {
     return $plugins;
 }
 */
+
+/* Poistetaan GMW:n ylimääräiset Google Maps -scriptit sivuilta joilla niitä ei tarvita */
+
 /*
 function remove_gmw_homostelu() {
 if(preg_match($_SERVER['REQUEST_URI'], '/omatulostin/')) {
@@ -384,6 +399,8 @@ if(preg_match($_SERVER['REQUEST_URI'], '/tulostinkartta/')) {
 add_action('wp_head', 'remove_gmw_homostelu', 1);
 */
 
+/* Tulostuspyyntösivulle pääsy vain lähettäjälle ja vastaanottajalle */
+
 function printjob_page() {
                 global $post;
                 global $wpdb;
@@ -409,6 +426,17 @@ function printjob_page() {
                 }
             printjob_status();
 }
+
+/* Tulostuspyynnön päivitysfunktio */
+
+/* Tulostuspyynnön tilat:
+    - tarjous
+    - tilaus
+    - maksu
+    - arvostelu
+    - valmis
+    - peruutettu
+    */
 
 function printjob_updated() {
 	    global $wpdb,$bp;
@@ -514,24 +542,29 @@ function printjob_updated() {
         messages_new_message( $args );    
         printjob_reload();    
     }
+
+/* BuddyPress-privaattiviestin lähettäminen tulostuspyynnöstä */
                 
 function printjob_message($recipient,$sender,$otsikko,$message) {
-  global $wpdb,$bp;
-  global $post;
-  global $user_ID;
+    global $wpdb,$bp;
+    global $post;
+    global $user_ID;
 
     $args = array( 'recipients' => $recipient, 'sender_id' => $sender, 'subject' => $otsikko, 'content' => $message );      
     messages_new_message( $args );
     }
 
+/* Ladataan tulostuspyyntösivu uudelleen päivityksen jälkeen */
+
 function printjob_reload() {    
     $tulostuspyyntourl =  get_permalink($post->ID);
-        echo "<script type='text/javascript'>                                                                                                               
-	           window.location.assign('" . $tulostuspyyntourl  . "')                                                                                     
+        echo "<script type='text/javascript'>                                                                                                   
+	           window.location.assign('" . $tulostuspyyntourl  . "')                                                                             
 	           </script>";
         }
-
     
+/* Tulostuspyynnön tilaviestit ja funktiot */
+
 function printjob_status() {
                 global $post;
                 global $wpdb;
@@ -576,6 +609,7 @@ function printjob_status() {
                 }                
         }
 
+/* Tulostuspyyntösivun tekstit */
 
 function printjob_text() {
                 global $post;
@@ -623,8 +657,8 @@ if( get_field( "tarjousaika" ) ): ?>
     <h3>Tarjouksen tiedot</h3>
     <p>Tarjous lähetetty: <?php the_field( "tarjousaika" ); ?></p>
     <ul>
-    <li>Tarjouksen kommentti: <?php the_field( "tarjous_kommentti" ); ?></li>
-    <li>Hinta bitcoineissa: <?php the_field( "bitcoin_hinta" ); ?></li>
+        <li>Tarjouksen kommentti: <?php the_field( "tarjous_kommentti" ); ?></li>
+        <li>Hinta bitcoineissa: <?php the_field( "bitcoin_hinta" ); ?></li>
     </ul>
 <?php endif;
 
@@ -632,8 +666,8 @@ if( get_field( "tilausaika" ) ): ?>
     <h3>Tilauksen tiedot</h3>
     <p>Tilattu: <?php the_field( "tilausaika" ); ?></p>
     <ul>
-    <li>Tilaajan osoite: <?php the_field( "toimitusosoite" ); ?></li>
-    <li>Tilauksen kommentti: <?php the_field( "tilauksen_kommentti" ); ?></li>
+        <li>Tilaajan osoite: <?php the_field( "toimitusosoite" ); ?></li>
+        <li>Tilauksen kommentti: <?php the_field( "tilauksen_kommentti" ); ?></li>
     </ul>
 <?php endif;
 
@@ -653,8 +687,9 @@ if( get_field( "valmisaika" ) ): ?>
         <li>Arvio: <?php the_field( "tekstiarvostelu" ); ?></li>
     </ul>
 <?php endif;
-
 }
+
+/* Tarjouksen Advanced Custom Forms -kentät */
 
 function printjob_tarjous() {
                 global $post;
@@ -680,6 +715,9 @@ function printjob_tarjous() {
                    ));
 }
 }
+
+/* Tilauksen Advanced Custom Forms -kentät */
+
 function printjob_tilaus() {
                 global $post;
                 global $wpdb;
@@ -696,27 +734,31 @@ function printjob_tilaus() {
                 $vastaanottaja = get_post($vastaanottaja);
                 $vastaanottaja = $vastaanottaja->post_author;
 
-if ($current_user_ID == $kirjoittaja){
-                $hinnoittelu = get_post_meta($postid,"bitcoin_hinta",true);
-                $lompakko = get_user_meta($current_user_ID,"btc_available",true);
-                $hinnoittelu = floatval($hinnoittelu);
-                $lompakko = floatval($lompakko);
+                if ($current_user_ID == $kirjoittaja){
+                    $hinnoittelu = get_post_meta($postid,"bitcoin_hinta",true);
+                    $lompakko = get_user_meta($current_user_ID,"btc_available",true);
+                    $hinnoittelu = floatval($hinnoittelu);
+                    $lompakko = floatval($lompakko);
 
-if($lompakko>$hinnoittelu) {
-    acf_form(array(
-                   'post_id'=> $postid,
-                   'field_groups' => array('4322'),
-                   'return' => '?updated=true',
-                   'submit_value'=> 'Päivitä',
-                   ));
-                }
+                    /* Näitä bitcoin-laskelmia pitää katsoa vielä "hieman" tarkemmin */    
+    
+                    if($lompakko>$hinnoittelu) {
+                        acf_form(array(
+                            'post_id'=> $postid,
+                            'field_groups' => array('4322'),
+                            'return' => '?updated=true',
+                            'submit_value'=> 'Päivitä',
+                            ));
+                    }
 
-    if($lompakko<$hinnoittelu) {
-			    echo "<h1>Sinulla ei ole tarpeeksi varaa!</h1>";
-                echo "<p>Siirrä ensin bittirahaa lompakkoosi...</p>";
+                    if($lompakko<$hinnoittelu) {
+			             echo "<h1>Sinulla ei ole tarpeeksi varaa!</h1>";
+                         echo "<p>Siirrä ensin bittirahaa lompakkoosi...</p>";
+                    }
                 }
-        }
 }
+
+/* Maksun Advanced Custom Forms -kentät */
 
 function printjob_maksu() {
                 global $post;
@@ -735,15 +777,17 @@ function printjob_maksu() {
                 $vastaanottaja = get_post($vastaanottaja);
                 $vastaanottaja = $vastaanottaja->post_author;
 
-if ($current_user_ID == $vastaanottaja){
-    acf_form(array(
-                   'post_id'=> $postid,
-                   'field_groups' => array('4323'),
-                   'return' => '?updated=true',
-                   'submit_value'=> 'Päivitä',
-                   ));
-            }
+                if ($current_user_ID == $vastaanottaja){
+                    acf_form(array(
+                        'post_id'=> $postid,
+                        'field_groups' => array('4323'),
+                        'return' => '?updated=true',
+                        'submit_value'=> 'Päivitä',
+                        ));
+                }
 }
+
+/* Arvostelun Advanced Custom Forms -kentät */
 
 function printjob_arvostelu() {
                 global $post;
@@ -762,21 +806,25 @@ function printjob_arvostelu() {
                 $vastaanottaja = get_post($vastaanottaja);
                 $vastaanottaja = $vastaanottaja->post_author;
 
-  if ($current_user_ID == $kirjoittaja){
-    acf_form(array(
-                   'post_id'=> $postid,
-                   'field_groups' => array('4324'),
-                   'return' => '?updated=true',
-                   'submit_value'=> 'Päivitä',
-                   ));
-            }
+                if ($current_user_ID == $kirjoittaja){
+                    acf_form(array(
+                        'post_id'=> $postid,
+                        'field_groups' => array('4324'),
+                        'return' => '?updated=true',
+                        'submit_value'=> 'Päivitä',
+                        ));
+                }
 }
+
+/* Valmiiseen ja peruutettuun tulostuspyyntöön ei tarvita mitään? */
 
 function printjob_valmis() {
 }
 
 function printjob_peruutettu() {
 }
+
+/* Turha funktio Block_IO:n testaamiseen */
 
 function tt_coinbase_test() {
     global $wpdb;
@@ -793,6 +841,8 @@ function tt_coinbase_test() {
     update_option("btc_kurssi", $accountbalance); 
 }
 
+/* Haetaan Bitcoinin kurssi Block.io:sta */
+
 function tt_update_kurssi() {
     global $wpdb;
     require_once(__ROOT__.'/wp-content/plugins/tulostinkartta/block_io.php'); 
@@ -806,6 +856,8 @@ function tt_update_kurssi() {
     $accountbalance = $accountbalance->price;
     update_option("btc_kurssi", $accountbalance);
 }
+
+/* Jokaiselle käyttäjälle oma henkilökohtainen Bitcoin-osoite Block.io:sta */
 
 function tt_blockio_accounts() {
     global $wpdb;
@@ -821,20 +873,21 @@ function tt_blockio_accounts() {
               $key = 'btc_address';
               $single = true;
               $btc_address = get_user_meta( $user_id, $key, $single );
-             if (empty($btc_address)) { 
+              if (empty($btc_address)) { 
               	 $newAddressInfo = $block_io->get_new_address(array('label' => $user_id));
                  update_user_meta($user_id,"btc_address",$newAddressInfo->data->address);                   
-    		 } else { 
-		 $newAddressInfo = $block_io->get_address_by_label(array('label' => $user_id));
-		 update_user_meta($user_id,"btc_address",$newAddressInfo->data->address);                   
-    		 } 
-	}
+    		  } else { 
+		         $newAddressInfo = $block_io->get_address_by_label(array('label' => $user_id));
+		         update_user_meta($user_id,"btc_address",$newAddressInfo->data->address);                   
+    		  } 
+	   }
 }
+
+/* Tehdään WordPress-vimpain, jossa on käyttäjän Bitcoin-tilin saldo ja osoite */
 
 add_action( 'widgets_init', function(){
 	    register_widget( 'BTC_Vimpain' );
 });
-
 
 class BTC_Vimpain extends WP_Widget {
     public function __construct() {
@@ -854,7 +907,7 @@ class BTC_Vimpain extends WP_Widget {
             echo "<p>BTC pending: " . get_user_meta($current_user_ID,"btc_pending",true) . "</p>";
             echo "<p>BTC address: " . get_user_meta($current_user_ID,"btc_address",true) . "</p>";
             echo "<p>BTC/EUR: " . get_option("btc_kurssi") . "</p>";
-}   
+        }   
     }
     
     public function form( $instance ) {
@@ -866,6 +919,7 @@ class BTC_Vimpain extends WP_Widget {
     }
 }   
     
+/* Päivitetään käyttäjien Block.io Bitcoin-tilien tiedot */
     
 function tt_blockio_balances() {
     global $wpdb;
@@ -890,6 +944,8 @@ function tt_blockio_balances() {
         }
 }
 
+/* Uuden käyttäjän rekisteröityessä tehdään käyttäjälle Bitcoin-tili */
+
 add_action( 'user_register', 'tt_register_btc', 10, 1 );
 
 function tt_register_btc($user_id) {
@@ -904,6 +960,8 @@ function tt_login_btc($user_login, $user) {
   tt_update_kurssi();
 }
 add_action('wp_login', 'tt_login_btc', 10, 2);
+
+/* WordPress päivittämään tilejä kerran tunnissa */
 
 add_action( 'wp', 'tulostinkartta_setup_schedule' );
 function tulostinkartta_setup_schedule() {
@@ -920,6 +978,8 @@ function tulostinkartta_do_this_hourly() {
   tt_update_kurssi();
 }
 
+/* Ilmeisesti täysin turha notifikaatiobotin funktio */
+
 function tulostinkartta_notifikaatio_botti() {
   global $wpdb,$bp;
   global $post;
@@ -931,6 +991,8 @@ function tulostinkartta_notifikaatio_botti() {
         'posts_per_page' => -1
 	);
 }
+
+/* Bittikukkaro bittirahojen nostamiseksi pois Tulostuskartan tililtä */
 
 function tulostinkartta_bittikukkaro() {
         global $user_ID;
@@ -951,15 +1013,14 @@ function tulostinkartta_bittikukkaro() {
 			    $amounts = ($amounts-0.0002);
 			    $tulos = $block_io->withdraw_from_addresses(array('amounts' => $amounts, 'from_addresses' => $from_addresses, 'to_addresses' => $to_addresses));
 				} 
-			}
-			tt_blockio_balances();
+          }
+			        tt_blockio_balances();
             		echo "<h1>Bitcoin-tilisi</h1>";
             		echo "<p>BTC balance: " . get_user_meta($current_user_ID,"btc_available",true) . "</p>";
             		echo "<p>BTC pending: " . get_user_meta($current_user_ID,"btc_pending",true) . "</p>";
             		echo "<p>BTC address: " . get_user_meta($current_user_ID,"btc_address",true) . "</p>";
             		echo "<p>BTC/EUR: " . get_option("btc_kurssi") . "</p>";
-			        echo '<p><img src="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=' . get_user_meta($current_user_ID,"btc_address",true) . '&choe=UTF-8" title="' . get_user_meta($current_user_ID,"btc_address",true) . '" />
-</p>'; 
+			        echo '<p><img src="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=' . get_user_meta($current_user_ID,"btc_address",true) . '&choe=UTF-8" title="' . get_user_meta($current_user_ID,"btc_address",true) . '" /></p>'; 
 			        $maxval = get_user_meta($current_user_ID,"btc_available",true);
 			        echo "<h1>Send BTC</h1>";
 			        echo '<form name="bittikukkaro" method="post" action="">'; 
