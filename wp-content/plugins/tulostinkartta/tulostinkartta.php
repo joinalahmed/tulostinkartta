@@ -746,20 +746,6 @@ function tulostinkartta_do_this_hourly() {
   tt_update_kurssi();
 }
 
-/* Ilmeisesti täysin turha notifikaatiobotin funktio */
-
-function tulostinkartta_notifikaatio_botti() {
-  global $wpdb,$bp;
-  global $post;
-  global $user_ID;
-
-  $args = array(
-  	'post_type' => 'tulostuspyynto',
-	'post_status' => 'publish',
-        'posts_per_page' => -1
-	);
-}
-
 /* Bittikukkaro bittirahojen nostamiseksi pois Tulostuskartan tililtä */
 
 function tulostinkartta_bittikukkaro() {
