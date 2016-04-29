@@ -20,20 +20,4 @@ return $content;
 }
 */
 
-/* Ohjataan rekisterÃ¶inti uudelleen */
-/*
-add_action('init','spammeri_redirect');
-function spammeri_redirect(){
-  global $pagenow;
-  if( 'wp-login.php' == $pagenow ) {
-    if ( isset( $_POST['wp-submit'] ) ||   // in case of LOGIN
-	 ( isset($_GET['action']) && $_GET['action']=='logout') ||   // in case of LOGOUT
-	 ( isset($_GET['checkemail']) && $_GET['checkemail']=='confirm') ||   // in case of LOST PASSWORD
-	 ( isset($_GET['checkemail']) && $_GET['checkemail']=='registered') ) return;    // in case of REGISTER
-    else wp_redirect(home_url('/register/')); // or wp_redirect(home_url('/login'));
-    exit();
-  }
-}
-*/
-
 ?>
