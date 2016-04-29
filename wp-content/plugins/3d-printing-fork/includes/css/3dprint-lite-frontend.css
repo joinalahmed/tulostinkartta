@@ -1,0 +1,193 @@
+div.color-sample {
+	width:30px;
+	height:20px;
+	display:inline-block
+}
+
+ul.p3dlite-list {
+	list-style-type:none;
+	margin-left:0
+}
+
+ul.p3dlite-list li {
+	cursor:pointer;
+	display:block;
+}
+
+ul.p3dlite-list li:hover {
+	background-color:#e2e2e2
+}
+
+#tab-description h2 {
+	display:none
+}
+
+div.printer-selector {
+	float:left;
+	margin-top:10px;
+	margin-bottom:10px;
+	width:100%
+}
+
+div.filament-selector {
+	float:left;
+	width:100%
+}
+
+div.p3dlite-info {
+	float:left;
+	margin-top:10px;
+	margin-bottom:10px;
+	width:100%
+}
+
+#p3dlite-viewer {
+	float:left;
+	width:100%
+}
+
+#p3dlite-container {
+	float:left;
+	width:100%
+}
+
+#p3dlite-console {
+	display:none;
+	width:100%
+}
+
+#p3dlite-filelist {
+	float:left;
+	width:100%
+}
+
+#p3dlite-stl-info {
+	float:left;
+	width:100%
+}
+
+#p3dlite-weight {
+	float:left;
+	width:100%
+}
+
+#p3dlite-price {
+	float:left;
+	width:100%
+}
+
+#p3dlite-viewer {
+	width:100%
+}
+
+fieldset.p3dlite-fieldset {
+	border:1px solid;
+	padding:10px
+}
+
+fieldset.p3dlite-fieldset legend {
+	padding:.2em .5em;
+	border:1px solid;
+	font-size:90%;
+	text-align:right
+}
+
+.p3dlite-stats {
+	display:none
+}
+
+#p3dlite-file-loading {
+	position:absolute;
+	left:90px;
+	top:65px;
+	display:none;
+}
+
+#p3dlite-pickfiles {
+	width:100%;
+	white-space:nowrap
+	text-align:center;
+	margin-bottom: 5px;
+}
+
+table.p3dlite-stats {
+	border-collapse:separate;
+	border-spacing:0;
+	border-width:1px 0 0 1px;
+	table-layout:fixed;
+	width:100%
+}
+
+table.p3dlite-stats,th,td {
+	border:1px solid rgba(51,51,51,0.1)!important
+}
+
+span.p3dlite-mail-success {
+	color:green
+}
+
+span.p3dlite-mail-error {
+	color:red
+}
+
+.price-request-field {
+	margin-bottom:3px;
+	width:48%
+}
+
+#p3dlite-cv {
+	width:100%
+}
+
+div.p3dlite-images {
+	float:left;
+	width:49%
+}
+div.p3dlite-details {
+	float:right;
+	width:49%;
+}
+
+@media screen and (max-width: 400px) {
+   div.p3dlite-images, div.p3dlite-details { 
+    float: none;
+    margin-right:0;
+    width:auto;
+    border:0;
+    border-bottom:2px solid #000;    
+  }
+}
+
+
+#canvas-stats {
+	position:absolute;
+}
+
+.canvas-stats {
+        margin:5px;
+	width:auto;
+	left:10px;
+	top:10px;
+	font:12px Courier New;
+	color:red;
+	background:transparent;
+	white-space:nowrap;
+}
+#p3d-statistics {
+	width:100px; 
+	top:25px; 
+}
+
+#price-container, #add-cart-container {
+	visibility: hidden;
+}
+
+#p3dlite-quote-loading {
+	position: absolute;
+	width:128px;
+}
+
+.p3dlite-control {
+    display: inline;
+    height: auto;
+}

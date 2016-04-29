@@ -1,6 +1,6 @@
 === Dropshipping ===
 Contributors: TomiToivio
-Tags: woocommerce, smtp, wp_mail, mailer, phpmailer
+Tags: woocommerce, dropshipping, stock status, product
 Requires at least: 4.4
 Tested up to: 4.4
 Stable tag: 0.1
