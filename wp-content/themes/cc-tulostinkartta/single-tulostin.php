@@ -101,12 +101,12 @@ if( have_rows('tulostimet') ):
         the_sub_field('tulostimesi_korkeus');
         echo " mm</td><td>";
         the_sub_field('tulostimesi_pituus');
-	echo " mm</td><td>";
+	    echo " mm</td><td>";
         the_sub_field('tulostimesi_hinta');
         echo " €/cm<sup>3</sup></td></tr>";
     endwhile;
-echo "</table>";
-endif;
+    echo "</table>";
+    endif;
 ?>
 </div>
 
@@ -122,23 +122,21 @@ if( have_rows('filamentit_lista') ):
         echo "</td><td>";
         the_sub_field('filamenttisi_hinta');
         echo " €/cm<sup>3</sup></td>";
-	$color = get_sub_field('filamentin_vari');
+	    $color = get_sub_field('filamentin_vari');
         echo '<td bgcolor="' . $color . '"></td></tr>';
     endwhile;
-echo "</table>";
+    echo "</table>";
 endif;
 ?>
 </div>
     
 <div>
 <h3>Tee tulostuspyyntö</h3>
-    <p><a href = "<?php echo "/3dprint/?printteri=" . $post->ID; ?>"><button>Tee tulostuspyyntö!</button></a></p></div>
-
-
-<?php /* echo do_shortcode('[3dprint-lite]'); */ ?>
+    <p><a href = "<?php echo "/3dprint/?printteri=" . $post->ID; ?>"><button>Tee tulostuspyyntö!</button></a></p>
+</div>
 <div>
 <h3>Sijainti</h3>
-<?php echo do_shortcode('[gmw_single_location additional_info="0" distance="0" hide_info="1" post_title="0"]'); ?>
+    <?php echo do_shortcode('[gmw_single_location additional_info="0" distance="0" hide_info="1" post_title="0"]'); ?>
 </div>    
     </footer><!-- .entry-meta -->
 </article><!-- #post-## -->
