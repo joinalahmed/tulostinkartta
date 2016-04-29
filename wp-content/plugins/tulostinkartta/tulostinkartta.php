@@ -192,18 +192,6 @@ function tulostuspyynto_post_type() {
 }
 add_action( 'init', 'tulostuspyynto_post_type', 0 );
 
-/* Admin bar piiloon epäadmineilta */
-
-/*
-add_action( 'after_setup_theme', 'remove_admin_bar' );
-
-function remove_admin_bar() {
-	if ( !current_user_can( 'administrator' ) && !is_admin() ) {
-		show_admin_bar( false );
-	}
-}
-*/
-
 /* Poistetaan GMW:n ylimääräiset Google Maps -scriptit sivuilta joilla niitä ei tarvita */
 
 /*
