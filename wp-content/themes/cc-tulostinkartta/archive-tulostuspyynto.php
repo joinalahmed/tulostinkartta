@@ -28,46 +28,50 @@ $content_class = array('main-content-inner');
 
                     <?php do_action( 'cc_first_inside_main_content_inner'); ?>
 
-<h1>Lähetetyt tulostuspyynnöt</h1>  
-  <?php if ( is_user_logged_in() ) {  
-$current_user_ID = get_current_user_id();
-$args = array('post_type' => 'tulostuspyynto',
-	      'author' => $current_user_ID);
-$the_query = new WP_Query( $args );
-if ( $the_query->have_posts() ) {
-  echo '<ul>';
-  while ( $the_query->have_posts() ) {
-    $the_query->the_post();
-    $tulostin = get_post_meta(get_the_ID(), "tulostin", true );
-    echo '<li><a href="' . get_permalink() . '">Tulostuspyyntö tulostimelle ' . get_the_title($tulostin) . '</a> (tila ' . get_post_meta(get_the_ID(), "tila", true )  . ')</li>';
-  }
-  echo '</ul>';
-} else {
-  echo "<p>Ei tulostuspyyntöjä!</p>";
-}
-wp_reset_postdata(); 
-?>
-<h1>Vastaanotetut tulostuspyynnöt</h1>
-<?php  
-$current_user_ID = get_current_user_id();
-$args = array('post_type' => 'tulostuspyynto',
-	      'meta_key'   => 'tulostinomistaja',
-	      'meta_value' => $current_user_ID);
-$the_query = new WP_Query( $args );
-if ( $the_query->have_posts() ) {
-  echo '<ul>';
-  while ( $the_query->have_posts() ) {
-    $the_query->the_post();
-    $tulostin = get_post_meta(get_the_ID(), "tulostin", true );
-    echo '<li><a href="' . get_permalink() . '">Tulostuspyyntö tulostimelle ' . get_the_title($tulostin) . '</a> (tila ' . get_post_meta(get_the_ID(), "tila", true )  . ')</li>';
-  }
-  echo '</ul>';
-} else {
-  echo "<p>Ei tulostuspyyntöjä!</p>";
-}
-wp_reset_postdata(); 
-}
-?>
+                    <h1>Lähetetyt tulostuspyynnöt</h1>  
+  
+                    <?php if ( is_user_logged_in() ) {  
+                        $current_user_ID = get_current_user_id();
+                        $args = array('post_type' => 'tulostuspyynto',
+	                   'author' => $current_user_ID);
+                        $the_query = new WP_Query( $args );
+                    
+                        if ( $the_query->have_posts() ) {
+                            echo '<ul>';
+                            while ( $the_query->have_posts() ) {
+                            $the_query->the_post();
+                            $tulostin = get_post_meta(get_the_ID(), "tulostin", true );
+                            echo '<li><a href="' . get_permalink() . '">Tulostuspyyntö tulostimelle ' . get_the_title($tulostin) . '</a> (tila ' . get_post_meta(get_the_ID(), "tila", true )  . ')</li>';
+                            }
+                            echo '</ul>';
+                            } else {
+                            echo "<p>Ei tulostuspyyntöjä!</p>";
+                            }
+                        wp_reset_postdata(); 
+                        ?>
+
+                    <h1>Vastaanotetut tulostuspyynnöt</h1>
+
+                    <?php $current_user_ID = get_current_user_id();
+                            $args = array('post_type' => 'tulostuspyynto',
+	                        'meta_key'   => 'tulostinomistaja',
+	                        'meta_value' => $current_user_ID);
+                            $the_query = new WP_Query( $args );
+
+                        if ( $the_query->have_posts() ) {
+                            echo '<ul>';
+  
+                            while ( $the_query->have_posts() ) {
+                                $the_query->the_post();
+                                $tulostin = get_post_meta(get_the_ID(), "tulostin", true );
+                                echo '<li><a href="' . get_permalink() . '">Tulostuspyyntö tulostimelle ' . get_the_title($tulostin) . '</a> (tila ' . get_post_meta(get_the_ID(), "tila", true )  . ')</li>';
+                                }
+                            echo '</ul>';
+                        } else {
+                            echo "<p>Ei tulostuspyyntöjä!</p>";
+                        }
+                        wp_reset_postdata(); 
+                    } ?>
                     
                 </div><!-- close #content -->
 
