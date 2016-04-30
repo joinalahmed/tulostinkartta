@@ -25,18 +25,6 @@ License: GPL2
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/* Valikkosivusta ei ole juuri nyt mitään hyötyä */
-
-add_action( 'admin_menu', 'tulostin_register_kartta_menu_page' );
-
-function tulostin_register_kartta_menu_page() {
-	add_menu_page( 'Tulostinkartta', 'Tulostinkartta', 'edit_plugins', 'tulostin_kartta', 'tulostin_kartta_menu_page' );
-}
-
-function tulostin_kartta_menu_page() {
-	echo "<h1>Karttaplugari</h1>";
-}
-
 /* Lisätään 3D-filamentit taksonomiaksi */
 
 function materiaali_taxonomy() {
@@ -784,3 +772,117 @@ function tulostinkartta_bittikukkaro() {
 			        echo '</form>';
 	}   
 }
+
+/* Asetukset: 
+    Block.io API key
+    Block.io pin
+    */
+
+class Tulostinkartta {
+	private $tulostinkartta_options;
+
+	public function __construct() {
+		add_action( 'admin_menu', array( $this, 'tulostinkartta_add_plugin_page' ) );
+		add_action( 'admin_init', array( $this, 'tulostinkartta_page_init' ) );
+	}
+
+	public function tulostinkartta_add_plugin_page() {
+		add_plugins_page(
+			'Tulostinkartta', // page_title
+			'Tulostinkartta', // menu_title
+			'manage_options', // capability
+			'tulostinkartta', // menu_slug
+			array( $this, 'tulostinkartta_create_admin_page' ) // function
+		);
+	}
+
+	public function tulostinkartta_create_admin_page() {
+		$this->tulostinkartta_options = get_option( 'tulostinkartta_option_name' ); ?>
+
+		<div class="wrap">
+			<h2>Tulostinkartta</h2>
+			<p>Tulostinkartan asetukset.</p>
+			<?php settings_errors(); ?>
+
+			<form method="post" action="options.php">
+				<?php
+					settings_fields( 'tulostinkartta_option_group' );
+					do_settings_sections( 'tulostinkartta-admin' );
+					submit_button();
+				?>
+			</form>
+		</div>
+	<?php }
+
+	public function tulostinkartta_page_init() {
+		register_setting(
+			'tulostinkartta_option_group', // option_group
+			'tulostinkartta_option_name', // option_name
+			array( $this, 'tulostinkartta_sanitize' ) // sanitize_callback
+		);
+
+		add_settings_section(
+			'tulostinkartta_setting_section', // id
+			'Settings', // title
+			array( $this, 'tulostinkartta_section_info' ), // callback
+			'tulostinkartta-admin' // page
+		);
+
+		add_settings_field(
+			'blockio_api_key_0', // id
+			'blockio_api_key', // title
+			array( $this, 'blockio_api_key_0_callback' ), // callback
+			'tulostinkartta-admin', // page
+			'tulostinkartta_setting_section' // section
+		);
+
+		add_settings_field(
+			'blockio_pin_1', // id
+			'blockio_pin', // title
+			array( $this, 'blockio_pin_1_callback' ), // callback
+			'tulostinkartta-admin', // page
+			'tulostinkartta_setting_section' // section
+		);
+	}
+
+	public function tulostinkartta_sanitize($input) {
+		$sanitary_values = array();
+		if ( isset( $input['blockio_api_key_0'] ) ) {
+			$sanitary_values['blockio_api_key_0'] = sanitize_text_field( $input['blockio_api_key_0'] );
+		}
+
+		if ( isset( $input['blockio_pin_1'] ) ) {
+			$sanitary_values['blockio_pin_1'] = sanitize_text_field( $input['blockio_pin_1'] );
+		}
+
+		return $sanitary_values;
+	}
+
+	public function tulostinkartta_section_info() {
+		
+	}
+
+	public function blockio_api_key_0_callback() {
+		printf(
+			'<input class="regular-text" type="text" name="tulostinkartta_option_name[blockio_api_key_0]" id="blockio_api_key_0" value="%s">',
+			isset( $this->tulostinkartta_options['blockio_api_key_0'] ) ? esc_attr( $this->tulostinkartta_options['blockio_api_key_0']) : ''
+		);
+	}
+
+	public function blockio_pin_1_callback() {
+		printf(
+			'<input class="regular-text" type="text" name="tulostinkartta_option_name[blockio_pin_1]" id="blockio_pin_1" value="%s">',
+			isset( $this->tulostinkartta_options['blockio_pin_1'] ) ? esc_attr( $this->tulostinkartta_options['blockio_pin_1']) : ''
+		);
+	}
+
+}
+if ( is_admin() )
+	$tulostinkartta = new Tulostinkartta();
+
+/* 
+ * Retrieve this value with:
+ * $tulostinkartta_options = get_option( 'tulostinkartta_option_name' ); // Array of All Options
+ * $blockio_api_key_0 = $tulostinkartta_options['blockio_api_key_0']; // blockio_api_key
+ * $blockio_pin_1 = $tulostinkartta_options['blockio_pin_1']; // blockio_pin
+ */
