@@ -10,6 +10,7 @@ wp_enqueue_style( 'custom-community', get_template_directory_uri() . '/style.css
 
 /* Advanced Custom Forms fields for Tulostinkartta */
 
+
 /*
 if( function_exists('acf_add_local_field_group') ):
 
