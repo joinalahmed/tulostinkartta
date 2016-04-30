@@ -18,8 +18,8 @@
 		<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
 <?php wp_head(); ?>
         
-        <script type='text/javascript' src='.../wp-content/plugins/3d-printing-fork/includes/js/3dprint-frontend.js'></script>
-        <script type='text/javascript' src='.../wp-content/plugins/3d-printing-fork/includes/js/3dprint-backend.js'></script>
+        <script type='text/javascript' src='.../wp-content/plugins/3d-print-lite/includes/js/3dprint-frontend.js'></script>
+        <script type='text/javascript' src='.../wp-content/plugins/3d-print-lite/includes/js/3dprint-backend.js'></script>
 
         <?php $post_type = get_post_type($post);
               if ( is_single() &&  $post_type == 'tulostin' ) { 
