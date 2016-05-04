@@ -98,6 +98,7 @@ wp-content/plugins/advanced-custom-fields-pro/
 
 # ignore specific themes
 wp-content/themes/twenty*/
+wp-content/themes/ukuli/
 
 # ignore node/grunt dependency directories
 node_modules/

@@ -9,7 +9,6 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
-
 $p3dlite_email_status_message="";
 add_action( 'plugins_loaded', 'p3dlite_request_price' );
 function p3dlite_request_price() {
@@ -352,14 +351,13 @@ Tiedoston mittayksikkö:		&nbsp;&nbsp;
     $filament_price_type = "cm3";
     
     unset($db_materials);
-    
+?>    
     
 	<div class="p3dlite-info">
 		<fieldset id="material_fieldset" class="p3dlite-fieldset">
 			<legend>Filamentti</legend>
 			<ul class="p3dlite-list">
 <?php
-
     $filamentit_numero = 0;
     $filamentin_nimi = get_post_meta($printteri, 'filamentit_lista_' . $filamentit_numero . '_filamentin_nimi', true);
     while(!empty($filamentin_nimi)) {
