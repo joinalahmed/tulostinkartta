@@ -30,45 +30,7 @@ function p3dlite_request_price() {
         
 		$db_printers=get_option( 'p3dlite_printers' ); 
 		$db_materials=get_option( 'p3dlite_materials' ); 
-        /*
-        $name = get_post_meta($printteri, 'name', TRUE); 
-        $width = get_post_meta($printteri, 'width', TRUE); 
-        $length = get_post_meta($printteri, 'length', TRUE); 
-        $height = get_post_meta($printteri, 'height', TRUE); 
-        $price = get_post_meta($printteri, 'price', TRUE); 
-        $price_type = get_post_meta($printteri, 'price_type', TRUE); 
-    
-        $db_printers[]=array(
-		  'name' => $name,
-		  'width' => $width,
-          	  'length' => $length,
-		  'height' => $height,
-		  'price' => $price,
-		  'price_type' => $price_type
-	   ); 
-            
-        $filament_name = get_post_meta($printteri, 'filament_name', TRUE); 
-        $filament_density = get_post_meta($printteri, 'filament_density', TRUE); 
-        $filament_length = get_post_meta($printteri, 'filament_length', TRUE); 
-        $filament_diameter = get_post_meta($printteri, 'filamentin_diameter', TRUE); 
-        $filament_weight = get_post_meta($printteri, 'filament_weight', TRUE); 
-        $filament_price = get_post_meta($printteri, 'filament_price', TRUE); 
-        $filament_price_type = get_post_meta($printteri, 'filament_price_type', TRUE); 
-        $filament_roll_price = get_post_meta($printteri, 'filament_roll_price', TRUE); 
-        $filament_color = get_post_meta($printteri, 'filament_color', TRUE); 
-    
-        $db_materials[]=array(
-               'name' => $filament_name,
-               'density' => $filament_density,
-               'length' => $filament_length,
-               'diameter' => $filament_diameter,
-               'weight' => $filament_weight,
-               'price' => $filament_price,
-               'price_type' => $filament_price_type,
-               'roll_price' => $filament_roll_price,
-               'color' => $filament_color
-        ); 
-*/
+
 		$db_coatings=get_option( 'p3dlite_coatings' );
 		$settings=get_option( 'p3dlite_settings' );
 		$error=false;
@@ -141,17 +103,12 @@ function p3dlite_request_price() {
             update_post_meta($newprintjobid, "tarjous", $maara*$hinta); 
             update_post_meta($newprintjobid, "tila", "tarjous");
 
-/*          update_post_meta($newprintjobid, "toimitustapa", $toimitustapa); */
             global $bp;  
-/*            $osoite = bp_get_profile_field_data("field=Sähköposti&user_id=".bp_loggedin_user_id()); */
-/*          update_post_meta($newprintjobid, "osoite", $osoite); */
             $tulostuspyyntourl = "/tulostuspyynto/" . $uusititle . "/";
 
-	    /* STL attachment */
 	    $filename = $link;
 	    $parent_post_id = $newprintjobid;
 	    $filetype = wp_check_filetype( basename( $filename ), null );
-/*	    $wp_upload_dir = wp_upload_dir(); */
 
 	    $attachment = array(
 	    		'guid'           => $link, 
@@ -168,15 +125,11 @@ function p3dlite_request_price() {
 	    $attach_data = wp_generate_attachment_metadata( $attach_id, $filename );
 
 	    wp_update_attachment_metadata( $attach_id, $attach_data );
-	    /*
-	    set_post_thumbnail( $parent_post_id, $attach_id );
-	    */
             echo "<p>Uusi tulostuspyyntö on tehty ja voit muokata sitä osoitteessa " . $tulostuspyyntourl . "</p>"; 
             echo "<script type='text/javascript'>                                                                                                           
 	    window.location.assign('" . $tulostuspyyntourl  . "?updated=true')
 	    </script>";
             
-			//todo: email template
 			$subject=__( "Price enquiry from $email_address" , '3dprint-lite' );
 
 			$message=__( "E-mail:" , '3dprint-lite' ) ." $email_address <br>";
@@ -197,13 +150,6 @@ function p3dlite_request_price() {
 
 			$admin_email = get_option( 'admin_email' );
 			$headers = array( 'Content-Type: text/html; charset=UTF-8' );
-/*			if ( wp_mail( $admin_email, $subject, $message, $headers ) )
-				$p3dlite_email_status_message='<span class="p3dlite-mail-success">'.__( 'Store owner has been notified about your request. You\'ll receive the email with the price shortly.' , '3dprint-lite' ).'</span>';
-			else
-				$p3dlite_email_status_message='<span class="p3dlite-mail-error">'.__( 'Could not send the email. Please try again later.' , '3dprint-lite' ).'</span>';
-
-			p3dlite_clear_cookies();
-			do_action( 'p3dlite_request_price' ); */
 		}
 	}
 }
@@ -223,18 +169,10 @@ function p3d_lite( $atts ) {
 	  <!-- if IE without GCF, prompt goes here -->
 	</div>
     
-<?php  
-    /* echo var_dump($db_printers); 
-       echo var_dump($db_materials); 
-       echo var_dump($db_coatings); 
-       echo var_dump($settings);  
-    */
-    ?>
 
     
     <?php
 		$printteri=(int)$_GET['printteri'];
-      /*  echo $printteri; */
     ?>
     
     
@@ -348,51 +286,7 @@ Tiedoston mittayksikkö:		&nbsp;&nbsp;
 			<img alt="Loading price" src="<?php echo plugins_url( '3dprint-lite/images/ajax-loader.gif' ); ?>">
 		</div>
 
-     
-        
-<?php /*
-    if ($uusi = "true") {
-    if(isset($_POST['materiaali'])) {
-    global $bp;  
-    $materiaali = $_POST['materiaali'];
-    $tulostin = $_POST['tulostaja'];
-    $toimitustapa = $_POST['toimitustapa'];
-    $tilaajaid = get_current_user_id();
-    $uusititle = time();
-    $newprintjob = array(
-			 'post_content'   => "",
-			 'post_title'     => $uusititle,
-			 'post_status'    => "publish",
-			 'post_type'      => "tulostuspyynto",
-			 'post_author'    => $tilaajaid,
-			 );  
-    $newprintjobid = wp_insert_post( $newprintjob);
-    $tulostinomistaja = get_post($tulostin); 
-    $tulostinomistaja = $tulostinomistaja->post_author;
-    update_post_meta($newprintjobid, "tulostinomistaja", $tulostinomistaja);
-    update_post_meta($newprintjobid, "materiaali", $materiaali);
-    update_post_meta($newprintjobid, "tulostin", $tulostin);
-    update_post_meta($newprintjobid, "tila", "luonnos");
-    update_post_meta($newprintjobid, "toimitustapa", $toimitustapa);
-    $osoite = bp_get_profile_field_data("field=Sähköposti&user_id=".bp_loggedin_user_id());
-    update_post_meta($newprintjobid, "osoite", $osoite);
-    $tulostuspyyntourl = "/tulostuspyynto/" . $uusititle . "/";
-    echo "<p>Uusi tulostuspyyntö on tehty ja voit muokata sitä osoitteessa " . $tulostuspyyntourl . "</p>"; 
-    echo "<script type='text/javascript'>                                                                                                    
-    window.location.assign('" . $tulostuspyyntourl  . "')                                                                                    
-        </script>";
-  }
-}
-        */ ?>
-        
-        <?php 
-/*  
-    global $bp;
-    $osoite = bp_get_profile_field_data("field=Sähköposti&user_id=".bp_loggedin_user_id()); 
-    echo $osoite; 
-    */
-        ?>
-        
+             
 <?php
 	if ( !empty( $p3dlite_email_status_message ) ) echo '<div class="p3dlite-info">'.$p3dlite_email_status_message.'</div>';
 ?>
@@ -413,8 +307,6 @@ Tiedoston mittayksikkö:		&nbsp;&nbsp;
     $db_printers=get_option( 'p3dlite_printers' );
 	$db_materials=get_option( 'p3dlite_materials' );
 	$db_coatings=get_option( 'p3dlite_coatings' );
-/*    echo var_dump($db_printers); */
-
 ?>
 
 	<div class="p3dlite-info">
@@ -427,26 +319,6 @@ Tiedoston mittayksikkö:		&nbsp;&nbsp;
     unset($db_printers);
     
     $printteri=(int)$_GET['printteri'];
-/*
-    $name = get_the_title($printteri); 
-    $width = get_post_meta($printteri, 'width', TRUE); 
-    $length = get_post_meta($printteri, 'length', TRUE); 
-    $height = get_post_meta($printteri, 'height', TRUE); 
-    $price = get_post_meta($printteri, 'price', TRUE); 
-  
-    $price_type = "cm3"; 
-
-    $db_printers[]=array(
-		'name' => $name,
-		'width' => $width,
-		'length' => $length,
-		'height' => $height,
-		'price' => $price,
-		'price_type' => $price_type
-	);
-    
-    echo var_dump(get_post_meta($printteri)); 
-*/
 ?>                
                 
 <?php
@@ -467,12 +339,8 @@ Tiedoston mittayksikkö:		&nbsp;&nbsp;
     }
     $printteri_numero++;
     }
-/*
-		for ( $i=0;$i<count( $db_printers );$i++ ) {
-			echo '<li onclick="p3dliteSelectPrinter(this);" data-name="'.esc_attr( $db_printers[$i]['name'] ).'"><input id="p3dlite_printer_'.$i.'" class="p3dlite-control" autocomplete="off" data-width="'.$db_printers[$i]['width'].'" data-length="'.$db_printers[$i]['length'].'" data-height="'.$db_printers[$i]['height'].'" data-id="'.$i.'" data-price="'.esc_attr( $db_printers[$i]['price'] ).'" data-price_type="'.$db_printers[$i]['price_type'].'" type="radio" name="product_printer">'.$db_printers[$i]['name'].'</li>';
-		}
-*/
 ?>
+                
 		  	</ul>
 	  	</fieldset>
 	</div>
@@ -480,132 +348,10 @@ Tiedoston mittayksikkö:		&nbsp;&nbsp;
     <?php 
         
     unset($db_materials);
-    
-  /*      
-    $filament_name = get_post_meta($printteri, 'filament_name', FALSE); 
-    $filament_density = get_post_meta($printteri, 'filament_density', FALSE); 
-    $filament_length = get_post_meta($printteri, 'filament_length', TRUE); 
-    $filament_diameter = get_post_meta($printteri, 'filamentin_diameter', TRUE); 
-    $filament_weight = get_post_meta($printteri, 'filament_weight', TRUE); 
-    $filament_price = get_post_meta($printteri, 'filament_price', TRUE); 
-*/
-    /* $filament_price_type = get_post_meta($printteri, 'filament_price_type', TRUE); */
-    
+        
     $filament_price_type = "cm3";
     
-    /* testi */
-    /*
-    $filament_roll_price = get_post_meta($printteri, 'filament_roll_price', TRUE); 
-    
-    $filament_color = get_post_meta($printteri, 'filament_color', TRUE); 
-    */
-  /*  
-    $abs = get_post_meta($printteri, 'abs', TRUE); 
-    $pla = get_post_meta($printteri, 'pla', TRUE); 
-    $bioflex = get_post_meta($printteri, 'bioflex', TRUE);
-    $nylon = get_post_meta($printteri, 'nylon', TRUE);
-    $pleksi = get_post_meta($printteri, 'pleksi', TRUE);
-    $puu = get_post_meta($printteri, 'puu', TRUE);
-    $pva = get_post_meta($printteri, 'pva', TRUE);
-
-    $tulostimet_lista = get_post_meta($printteri, 'tulostimet_lista', TRUE);
-    echo var_dump($tulostimet_lista);
-
-    $filamentit_lista = get_post_meta($printteri, 'filamentit_lista_0_filamentin_nimi', TRUE);
-    echo var_dump($filamentit_lista);
-    
-    $abs_filamentin_hinta = get_post_meta($printteri, 'abs-filamentin_hinta', TRUE);     
-    $pla_filamentin_hinta = get_post_meta($printteri, 'pla-filamentin_hinta', TRUE); 
-    $bioflex_filamentin_hinta = get_post_meta($printteri, 'abs-filamentin_hinta', TRUE);     
-    $nylon_filamentin_hinta = get_post_meta($printteri, 'nylon-filamentin_hinta', TRUE); 
-    $pleksi_filamentin_hinta = get_post_meta($printteri, 'pleksi-filamentin_hinta', TRUE); 
-    $puu_filamentin_hinta = get_post_meta($printteri, 'puu-filamentin_hinta', TRUE);     
-    $pva_filamentin_hinta = get_post_meta($printteri, 'pva-filamentin_hinta', TRUE); 
-
-    $abs = $abs[0];
-    $pla = $pla[0];
-    $bioflex = $bioflex[0];
-    $nylon = $nylon[0];
-    $pleksi = $pleksi[0];
-    $puu = $puu[0];
-    $pva = $pva[0]; 
-*/
-   /* echo "<h1>" . var_dump($abs) . "</h1>";
-    
-    echo "<h1>" . var_dump($abs_filamentin_hinta) . "</h1>"; */
-
     unset($db_materials);
-  /*  
-    $db_materials[]=array();
-    
-    if($abs = "kyllä") {
-    array_push($db_materials['name'] = 'ABS');
-    array_push($db_materials['density'] = '10');
-    array_push($db_materials['length'] = '10');
-    array_push($db_materials['diameter'] = '10');
-    array_push($db_materials['weight'] = '10');        
-    array_push($db_materials['price'] = $abs_filamentin_hinta);
-    array_push($db_materials['price_type'] = 'cm3');
-    array_push($db_materials['roll_price'] = '10');
-    array_push($db_materials['color'] = '#000000');
-        }
-    
-    if($pla = "kyllä") {
-    array_push($db_materials['name'] = 'PLA');
-    array_push($db_materials['density'] = '10');
-    array_push($db_materials['length'] = '10');
-    array_push($db_materials['diameter'] = '10');
-    array_push($db_materials['weight'] = '10');        
-    array_push($db_materials['price'] = $pla_filamentin_hinta);
-    array_push($db_materials['price_type'] = 'cm3');
-    array_push($db_materials['roll_price'] = '10');
-    array_push($db_materials['color'] = '#000000');         
-        }
-        */
-   /* echo "<h1>" . var_dump($db_materials) . "</h1>"; */
-    
-    /*
-    $db_materials[]=array(
-            'name' => $filament_name,
-            'density' => $filament_density,
-            'length' => $filament_length,
-            'diameter' => $filament_diameter,
-            'weight' => $filament_weight,
-            'price' => $filament_price,
-            'price_type' => $filament_price_type,
-            'roll_price' => $filament_roll_price,
-            'color' => $filament_color);
-            */
-/*    
-    array_push($db_materials,'name' => $filament_name,
-            'density' => $filament_density,
-            'length' => $filament_length,
-            'diameter' => $filament_diameter,
-            'weight' => $filament_weight,
-            'price' => $filament_price,
-            'price_type' => $filament_price_type,
-            'roll_price' => $filament_roll_price,
-            'color' => $filament_color);
-
-    array_push($db_materials,'name' => $filament_name,
-            'density' => $filament_density,
-            'length' => $filament_length,
-            'diameter' => $filament_diameter,
-            'weight' => $filament_weight,
-            'price' => $filament_price,
-            'price_type' => $filament_price_type,
-            'roll_price' => $filament_roll_price,
-            'color' => $filament_color);
-*/
-    
-    /*    	$db_printers[]=array(
-		      'name' => 'Printteri',
-		      'width' => '300',
-		      'length' => '400',
-		      'height' => '300',
-		      'price' => '0.02',
-		      'price_type' => 'box_volume'); */
-   ?>
     
     
 	<div class="p3dlite-info">
@@ -616,51 +362,18 @@ Tiedoston mittayksikkö:		&nbsp;&nbsp;
 
     $filamentit_numero = 0;
     $filamentin_nimi = get_post_meta($printteri, 'filamentit_lista_' . $filamentit_numero . '_filamentin_nimi', true);
-/*    $filamentin_nimi = $filamentin_nimi[0]; */
     while(!empty($filamentin_nimi)) {
     $filamentin_nimi = get_post_meta($printteri, 'filamentit_lista_' . $filamentit_numero . '_filamentin_nimi', true);
     $filamentin_hinta = get_post_meta($printteri, 'filamentit_lista_' . $filamentit_numero . '_filamenttisi_hinta', true);    
     $filamentin_vari = get_post_meta($printteri, 'filamentit_lista_' . $filamentit_numero . '_filamentin_vari', true);
-  /*  $filamentin_nimi = $filamentin_nimi[0];
-    $filamentin_hinta = $filamentin_hinta[0];
-    $filamentin_vari = $filamentin_vari[0]; */
-/*    echo $filamentin_nimi; */
     if(!empty($filamentin_nimi)) {
     echo '<li data-color="' . $filamentin_vari . '" data-name="' . $filamentin_nimi . '" onclick="p3dliteSelectFilament(this);"><input id="p3dlite_material_' . $filamentit_numero . '" class="p3dlite-control" autocomplete="off" type="radio" data-id="' . $filamentit_numero . '" data-density="1" data-price="'.esc_attr($filamentin_hinta).'" data-price_type="cm3" name="product_filament" ><div style="background-color:' . $filamentin_vari . '" class="color-sample"></div>' . $filamentin_nimi . '</li>';
     }
     $filamentit_numero++;
     }
 
-/*
-    $filamentit_lista = get_post_meta($printteri, 'filamentit_lista_0_filamentin_nimi', true);
-    echo var_dump($filamentit_lista);
-    echo $filamentit_lista;
-*/
-/*
-    if($abs == "kyllä") {
-			echo '<li data-color=\'#eeeeee\' data-name="ABS" onclick="p3dliteSelectFilament(this);"><input id="p3dlite_material_0" class="p3dlite-control" autocomplete="off" type="radio" data-id="0" data-density="1" data-price="'.esc_attr($abs_filamentin_hinta).'" data-price_type="cm3" name="product_filament" ><div style="background-color:#eeeeee" class="color-sample"></div>ABS</li>';
-		}
-        if($pla == "kyllä") {
-			echo '<li data-color=\'#eeeeee\' data-name="PLA" onclick="p3dliteSelectFilament(this);"><input id="p3dlite_material_1" class="p3dlite-control" autocomplete="off" type="radio" data-id="1" data-density="1" data-price="'.esc_attr($pla_filamentin_hinta).'" data-price_type="cm3" name="product_filament" ><div style="background-color:#eeeeee" class="color-sample"></div>PLA</li>';
-        }
-            if($bioflex == "kyllä") {
-			echo '<li data-color=\'#eeeeee\' data-name="Bioflex" onclick="p3dliteSelectFilament(this);"><input id="p3dlite_material_2" class="p3dlite-control" autocomplete="off" type="radio" data-id="2" data-density="1" data-price="'.esc_attr($bioflex_filamentin_hinta).'" data-price_type="cm3" name="product_filament" ><div style="background-color:#eeeeee" class="color-sample"></div>Bioflex</li>';
-        }
-        if($nylon == "kyllä") {
-			echo '<li data-color=\'#eeeeee\' data-name="Nylon" onclick="p3dliteSelectFilament(this);"><input id="p3dlite_material_3" class="p3dlite-control" autocomplete="off" type="radio" data-id="3" data-density="1" data-price="'.esc_attr($nylon_filamentin_hinta).'" data-price_type="cm3" name="product_filament" ><div style="background-color:#eeeeee" class="color-sample"></div>Nylon</li>';
-        }
-        if($pleksi == "kyllä") {
-			echo '<li data-color=\'#eeeeee\' data-name="Pleksi" onclick="p3dliteSelectFilament(this);"><input id="p3dlite_material_4" class="p3dlite-control" autocomplete="off" type="radio" data-id="4" data-density="1" data-price="'.esc_attr($pleksi_filamentin_hinta).'" data-price_type="cm3" name="product_filament" ><div style="background-color:#eeeeee" class="color-sample"></div>Pleksi</li>';
-        }
-        if($puu == "kyllä") {
-			echo '<li data-color=\'#eeeeee\' data-name="Puu" onclick="p3dliteSelectFilament(this);"><input id="p3dlite_material_5" class="p3dlite-control" autocomplete="off" type="radio" data-id="5" data-density="1" data-price="'.esc_attr($puu_filamentin_hinta).'" data-price_type="cm3" name="product_filament" ><div style="background-color:#eeeeee" class="color-sample"></div>Puu</li>';
-        }
-        if($pva == "kyllä") {
-			echo '<li data-color=\'#eeeeee\' data-name="PVA" onclick="p3dliteSelectFilament(this);"><input id="p3dlite_material_6" class="p3dlite-control" autocomplete="off" type="radio" data-id="6" data-density="1" data-price="'.esc_attr($pva_filamentin_hinta).'" data-price_type="cm3" name="product_filament" ><div style="background-color:#eeeeee" class="color-sample"></div>PVA</li>';
-        }
-*/
 ?>
-			</ul>
+            </ul>
 		</fieldset>
 	</div>
 <?php 
