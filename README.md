@@ -4,7 +4,7 @@ Tulostinkartan oma koodi on Tulostinkartta-plugarissa ja Tulostinkartan lapsitee
 
 Lisäksi tarvitaan ainakin seuraavat plugarit:
 
-    * 3DPrint Lite (Forkattu, antakaa sieluillemme anteeksi)
+    * 3DPrint Lite (Forkattu)
     * Advanced Custom Fields
     * BuddyPress
     * canvasio3D Light
