@@ -176,7 +176,7 @@ function tulostinkartta_bittikukkaro() {
 	}   
 }
 
-add_action( 'admin_footer', 'bittikukkaro_javascript' ); // Write our JS below here
+add_action( 'wp_footer', 'bittikukkaro_javascript' ); 
 
 function bittikukkaro_javascript() { 
         global $user_ID;
@@ -209,6 +209,6 @@ function bittikukkaro_callback() {
 
     echo $btc_address;
 
-	wp_die(); // this is required to terminate immediately and return a proper response
+	wp_die(); 
     }
 }
