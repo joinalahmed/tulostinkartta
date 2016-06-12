@@ -175,3 +175,4 @@ function tulostinkartta_bittikukkaro() {
 			        echo '</form>';
 	}   
 }
+
