@@ -701,8 +701,8 @@ function tt_blockio_balances() {
               $accountbalance = $block_io->get_address_balance(array('labels' => $user_id));            
               $accountbalance = $accountbalance->data->balances;
               $accountbalance = $accountbalance[0];
-			  $bitcoin_balance = round($accountbalance->available_balance, 4);
-			  $bitcoin_pending = round($accountbalance->pending_received_balance, 4);
+	      $bitcoin_balance = round($accountbalance->available_balance, 4);
+	      $bitcoin_pending = round($accountbalance->pending_received_balance, 4);
               update_user_meta($user_id,"btc_available",$bitcoin_balance);
               update_user_meta($user_id,"btc_pending",$bitcoin_pending);
         }
@@ -738,37 +738,39 @@ function tulostinkartta_do_this_hourly() {
 
 function tulostinkartta_bittikukkaro() {
         global $user_ID;
+        $current_user_ID = get_current_user_id();
         if(is_user_logged_in()) {
-            $current_user_ID = get_current_user_id();
 		  if (!empty($_POST["to"])) {
-            if (!empty($_POST["amount"])) {
+            	     if (!empty($_POST["amount"])) {
 		        $to = $_POST["to"];
-                require_once(__ROOT__.'/wp-content/plugins/tulostinkartta/block_io.php'); 
-                $apiKey = get_option( 'blockio_api_key' );  
-    	        $version = 2; 
-                $pin = get_option( 'blockio_pin' );    
-			    $block_io = new BlockIo($apiKey, $pin, $version); 
-			    $from_addresses = get_user_meta($current_user_ID,"btc_address",true);
-			    $to_addresses = $_POST["to"];
-			    $amounts = $_POST["amount"];
-			    $amounts = floatval($amounts);
-			    $amounts = ($amounts-0.0002);
-			    $tulos = $block_io->withdraw_from_addresses(array('amounts' => $amounts, 'from_addresses' => $from_addresses, 'to_addresses' => $to_addresses));
-				} 
-          }
+                	require_once(__ROOT__.'/wp-content/plugins/tulostinkartta/block_io.php');                 										  
+			$apiKey = get_option( 'blockio_api_key' );  
+    	        	$version = 2; 
+                	$pin = get_option( 'blockio_pin' );    
+			$block_io = new BlockIo($apiKey, $pin, $version); 
+			$from_addresses = get_user_meta($current_user_ID,"btc_address",true);
+			$to_addresses = $_POST["to"];
+			$amounts = $_POST["amount"];
+			$amounts = floatval($amounts);
+			$amounts = ($amounts-0.0002);
+			$tulos = $block_io->withdraw_from_addresses(array('amounts' => $amounts, 'from_addresses' => $from_addresses, 'to_addresses' => $to_addresses));
+			echo var_dump($tulos);
+			} 
+          	 }
+				tt_blockio_accounts();
 			        tt_blockio_balances();
-            		echo "<h1>Bitcoin-tilisi</h1>";
-            		echo "<p>BTC balance: " . get_user_meta($current_user_ID,"btc_available",true) . "</p>";
-            		echo "<p>BTC pending: " . get_user_meta($current_user_ID,"btc_pending",true) . "</p>";
-            		echo "<p>BTC address: " . get_user_meta($current_user_ID,"btc_address",true) . "</p>";
-            		echo "<p>BTC/EUR: " . get_option("btc_kurssi") . "</p>";
+            			echo "<h1>Bitcoin-tilisi</h1>";
+            			echo "<p>BTC balance: " . get_user_meta($current_user_ID,"btc_available",true) . "</p>";
+            			echo "<p>BTC pending: " . get_user_meta($current_user_ID,"btc_pending",true) . "</p>";
+            			echo "<p>BTC address: " . get_user_meta($current_user_ID,"btc_address",true) . "</p>";
+            			echo "<p>BTC/EUR: " . get_option("btc_kurssi") . "</p>";
 			        echo '<p><img src="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=' . get_user_meta($current_user_ID,"btc_address",true) . '&choe=UTF-8" title="' . get_user_meta($current_user_ID,"btc_address",true) . '" /></p>'; 
 			        $maxval = get_user_meta($current_user_ID,"btc_available",true);
 			        echo "<h1>Send BTC</h1>";
 			        echo '<form name="bittikukkaro" method="post" action="">'; 
-				    echo 'BTC Address: <input type="text" name="to" required/> <br />';
-				    echo 'BTC Amount: <input type="number" name="amount" max="' . $maxval . '" min="0" step="0.0001" required/><br />';
-				    echo '<input type="submit"  value="send"/>';
+				echo 'BTC Address: <input type="text" name="to" required/> <br />';
+				echo 'BTC Amount: <input type="number" name="amount" max="' . $maxval . '" min="0" step="0.0001" required/><br />';
+				echo '<input type="submit"  value="send"/>';
 			        echo '</form>';
 	}   
 }
