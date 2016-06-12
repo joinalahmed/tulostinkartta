@@ -164,14 +164,13 @@ function tulostinkartta_bittikukkaro() {
             echo "<p>BTC balance: " . get_user_meta($current_user_ID,"btc_available",true) . "</p>";
             echo "<p>BTC pending: " . get_user_meta($current_user_ID,"btc_pending",true) . "</p>";
             echo "<p>BTC address: " . get_user_meta($current_user_ID,"btc_address",true) . "</p>";
-            echo "<p>BTC/EUR: " . get_option("btc_kurssi") . "</p>";
             echo '<p><img src="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=' . get_user_meta($current_user_ID,"btc_address",true) . '&choe=UTF-8" title="' . get_user_meta($current_user_ID,"btc_address",true) . '" /></p>'; 
-			        $maxval = get_user_meta($current_user_ID,"btc_available",true);
+	    $maxval = get_user_meta($current_user_ID,"btc_available",true);
             echo "<h1>Send BTC</h1>";
-            echo '<form name="bittikukkaro" method="post" action="">'; 
-            echo 'BTC Address: <input type="text" name="to" required/> <br />';
-            echo 'BTC Amount: <input type="number" name="amount" max="' . $maxval . '" min="0" step="0.0001" required/><br />';
-            echo '<input type="submit"  value="send"/>';
-            echo '</form>';
+	    echo '<form name="bittikukkaro" method="post" action="">'; 
+ 	    echo 'BTC Address: <input type="text" name="to" required/> <br />';
+ 	    echo 'BTC Amount: <input type="number" name="amount" max="' . $maxval . '" min="0" step="0.0001" required/><br />';
+ 	    echo '<input type="submit"  value="send"/>';
+	    echo '</form>';
 	}   
 }
