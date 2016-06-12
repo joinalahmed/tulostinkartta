@@ -25,7 +25,7 @@ License: GPL2
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-include 'tulostinkartta-cpt.pnp';   
+include 'tulostinkartta-cpt.php';   
 include 'tulostinkartta-printer.php';
 include 'tulostinkartta-printjob.php';
 include 'tulostinkartta-bitcoin.php';

@@ -188,8 +188,10 @@ function bittikukkaro_javascript() {
 
 		var data = {
 			'action': 'bittikukkaro',
-			'userid': <?php echo $current_user_ID; ?>
+			'userid': '<?php echo $current_user_ID; ?>'
 		};
+
+		var ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>';
 
 		jQuery.post(ajaxurl, data, function(response) {
 			alert('Got this from the server: ' + response);
@@ -201,14 +203,11 @@ function bittikukkaro_javascript() {
 add_action( 'wp_ajax_my_action', 'bittikukkaro_callback' );
 
 function bittikukkaro_callback() {
-	global $wpdb; // this is how you get access to the database
-
-	$userid = intval( $_POST['userid'] );
-
-    $btc_address = get_user_meta($userid,"btc_address",true);
-
-    echo $btc_address;
-
+	global $wpdb; 
+	$userid = $_POST['userid'];
+	echo "dumbass";
+    	$btc_address = get_user_meta($userid,"btc_address",true);
+    	echo $btc_address;
 	wp_die(); 
     }
 }
