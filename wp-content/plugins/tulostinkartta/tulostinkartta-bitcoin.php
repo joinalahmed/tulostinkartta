@@ -175,3 +175,40 @@ function tulostinkartta_bittikukkaro() {
             echo '</form>';
 	}   
 }
+
+add_action( 'admin_footer', 'bittikukkaro_javascript' ); // Write our JS below here
+
+function bittikukkaro_javascript() { 
+        global $user_ID;
+        $current_user_ID = get_current_user_id();
+        if(is_user_logged_in()) {
+?>
+	<script type="text/javascript" >
+	jQuery(document).ready(function($) {
+
+		var data = {
+			'action': 'bittikukkaro',
+			'userid': <?php echo $current_user_ID; ?>
+		};
+
+		jQuery.post(ajaxurl, data, function(response) {
+			alert('Got this from the server: ' + response);
+		});
+	});
+	</script> <?php
+}
+
+add_action( 'wp_ajax_my_action', 'bittikukkaro_callback' );
+
+function bittikukkaro_callback() {
+	global $wpdb; // this is how you get access to the database
+
+	$userid = intval( $_POST['userid'] );
+
+    $btc_address = get_user_meta($userid,"btc_address",true);
+
+    echo $btc_address;
+
+	wp_die(); // this is required to terminate immediately and return a proper response
+    }
+}
