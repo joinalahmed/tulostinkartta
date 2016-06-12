@@ -176,8 +176,6 @@ function tulostinkartta_bittikukkaro() {
 	}   
 }
 
-<<<<<<< HEAD
-=======
 add_action( 'admin_footer', 'bittikukkaro_javascript' ); // Write our JS below here
 
 function bittikukkaro_javascript() { 
@@ -214,4 +212,3 @@ function bittikukkaro_callback() {
 	wp_die(); // this is required to terminate immediately and return a proper response
     }
 }
->>>>>>> 7ffa120267f2f70ef5056a3311c7f68996af64ba
