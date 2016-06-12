@@ -30,6 +30,44 @@ include 'tulostinkartta-printer.php';
 include 'tulostinkartta-printjob.php';
 include 'tulostinkartta-bitcoin.php';
 
+
+add_action( 'wp_head', 'bittikukkaro_javascript' );
+
+function bittikukkaro_javascript() {
+        global $user_ID;
+        $current_user_ID = get_current_user_id();
+        if(is_user_logged_in()) {
+?>
+        <script type="text/javascript" >
+        jQuery(document).ready(function($) {
+
+                var data = {
+                        'action': 'bittikukkaro',
+                        'userid': <?php echo $current_user_ID; ?>
+                };
+
+                var ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>';
+
+                jQuery.post(ajaxurl, data, function(response) {
+                        alert('Got this from the server: ' + response);
+                });
+        });
+        </script> <?php
+}
+
+add_action( 'wp_ajax_bittikukkaro', 'bittikukkaro_callback' );
+
+function bittikukkaro_callback() {
+        global $wpdb;
+        $userid = $_POST['userid'];
+        echo "dumbass";
+        $btc_address = get_user_meta($userid,"btc_address",true);
+        echo $btc_address;
+        wp_die();
+    }
+}
+
+
 /* Asetukset: 
     Block.io API key
     Block.io pin
