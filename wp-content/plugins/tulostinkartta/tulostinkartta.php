@@ -30,7 +30,6 @@ include 'tulostinkartta-printer.php';
 include 'tulostinkartta-printjob.php';
 include 'tulostinkartta-bitcoin.php';
 
-
 add_action( 'wp_head', 'bittikukkaro_javascript' );
 
 function bittikukkaro_javascript() {
@@ -53,19 +52,21 @@ function bittikukkaro_javascript() {
                 });
         });
         </script> <?php
-}
+}}
 
+
+admin_url( 'admin-ajax.php' );
+add_action( 'wp_ajax_nopriv_bittikukkaro', 'bittikukkaro_callback' );
 add_action( 'wp_ajax_bittikukkaro', 'bittikukkaro_callback' );
 
 function bittikukkaro_callback() {
         global $wpdb;
         $userid = $_POST['userid'];
-        echo "dumbass";
         $btc_address = get_user_meta($userid,"btc_address",true);
         echo $btc_address;
         wp_die();
     }
-}
+
 
 
 /* Asetukset: 
