@@ -2,13 +2,17 @@
  * @author Sergey Burkov, http://www.wp3dprinting.com
  * @copyright 2015
  */
+
 p3dlite.bar_progress=0;
 p3dlite.xhr='';
 p3dlite.schedule_quote=0;
 p3dlite.filereader_supported=true;
 p3dlite.file_selected=0;
+p3dlite.cookie_expire = parseInt(p3dlite.cookie_expire);
 p3dlite.aabb = new Array();
 window.onload = function() {
+
+	if (!document.getElementById('p3dlite-cv')) return;
 
 	window.p3dlite_canvas = document.getElementById('p3dlite-cv');
 
@@ -77,7 +81,7 @@ window.onload = function() {
 
 	if (jQuery('input[name=get_printer_id]').val())	{
 		printer=jQuery('input[name=get_printer_id]').val()
-		jQuery.cookie('p3dlite_printer', printer);
+		jQuery.cookie('p3dlite_printer', printer, { expires: p3dlite.cookie_expire });
 	}
 	else if (jQuery.cookie('p3dlite_printer')!=='undefined' && jQuery('#p3dlite_printer_'+jQuery.cookie('p3dlite_printer')).length>0) {
 		printer=jQuery.cookie('p3dlite_printer');
@@ -89,7 +93,7 @@ window.onload = function() {
 
 	if (jQuery('input[name=get_material_id]').val()) {
 		material=jQuery('input[name=get_material_id]').val()
-		jQuery.cookie('p3dlite_material', material);
+		jQuery.cookie('p3dlite_material', material, { expires: p3dlite.cookie_expire });
 	}
 	else if (jQuery.cookie('p3dlite_material')!=='undefined' && jQuery('#p3dlite_material_'+jQuery.cookie('p3dlite_material')).length>0)	{
 		material=jQuery.cookie('p3dlite_material');
@@ -99,7 +103,7 @@ window.onload = function() {
 	}
 	if (jQuery('input[name=get_coating_id]').val()) {
 		coating=jQuery('input[name=get_coating_id]').val()
-		jQuery.cookie('p3dlite_coating', coating);
+		jQuery.cookie('p3dlite_coating', coating, { expires: p3dlite.cookie_expire });
 	}
 	else if (jQuery.cookie('p3dlite_coating')!='undefined' && jQuery('#p3dlite_coating_'+jQuery.cookie('p3dlite_coating')).length>0)	{
 		coating=jQuery.cookie('p3dlite_coating');
@@ -110,7 +114,7 @@ window.onload = function() {
 
 	if (jQuery('input[name=get_product_model]').val()) {
 		product_file=jQuery('input[name=get_product_model]').val();
-		jQuery.cookie('p3dlite_file', product_file);
+		jQuery.cookie('p3dlite_file', product_file, { expires: p3dlite.cookie_expire });
 	}
 	else {
 		product_file=jQuery.cookie('p3dlite_file');
@@ -118,7 +122,7 @@ window.onload = function() {
 
 	if (jQuery('input[name=get_product_unit]').val()) {
 		product_unit=jQuery('input[name=get_product_unit]').val();
-		jQuery.cookie('p3dlite_unit', product_unit);
+		jQuery.cookie('p3dlite_unit', product_unit, { expires: p3dlite.cookie_expire });
 	}
 	else if (jQuery.cookie('p3dlite_unit')!=='undefined') {
 		product_unit=jQuery.cookie('p3dlite_unit');
@@ -127,7 +131,7 @@ window.onload = function() {
 		product_unit='mm';
 	}
 
-	material_volume=jQuery.cookie('p3dlite-stats-material-volume');
+	material_volume=jQuery.cookie('p3dlite-stats-material-volume', { expires: p3dlite.cookie_expire });
 
 	jQuery('#stats-material-volume').html(jQuery.cookie('p3dlite-stats-material-volume'));
 
@@ -137,7 +141,7 @@ window.onload = function() {
 	jQuery('#stats-height').html(jQuery.cookie('p3dlite-stats-height'));
 
 	jQuery('#stats-weight').html(jQuery.cookie('p3dlite-stats-weight'));
-	if (jQuery.cookie('p3dlite-stats-material-volume')) jQuery('.p3dlite-stats').show();
+	//if (jQuery.cookie('p3dlite-stats-material-volume')) jQuery('.p3dlite-stats').show();
 
 	if (typeof(printer)!=='undefined') {
 		jQuery('#p3dlite_printer_'+printer).attr('checked', 'checked');
@@ -191,6 +195,7 @@ window.onload = function() {
 }
 
 jQuery(document).ready(function(){
+if (!document.getElementById('p3dlite-container')) return;
 window.p3dlite_uploader = new plupload.Uploader({
 	runtimes : 'html5,flash,silverlight,browserplus,gears,html4',
 	browse_button : 'p3dlite-pickfiles', // you can pass an id...
@@ -358,9 +363,9 @@ p3dlite_uploader.bind('FileUploaded', function(p3dlite_uploader,file,response) {
 	jQuery('.p3dlite-mail-success').remove();
 	jQuery('.p3dlite-mail-error').remove();
         jQuery('#add-cart-container').css('visibility','visible');
-        jQuery.cookie('p3dlite_file',data.filename, { expires: 2 });
+        jQuery.cookie('p3dlite_file',data.filename, { expires: p3dlite.cookie_expire });
 	if (!p3dlite.filereader_supported) p3dlite_viewer.replaceSceneFromUrl(p3dlite.upload_url+data.filename);
-	jQuery.cookie('p3dlite_file',data.filename, { expires: 2 });
+	jQuery.cookie('p3dlite_file',data.filename, { expires: p3dlite.cookie_expire });
 	product_file=data.filename;
 	jQuery('#pa_p3dlite_model').val(product_file);
 	jQuery('.p3dlite-stats').show();
@@ -428,7 +433,8 @@ function p3dliteInitProgressButton () {
 }
 
 jQuery(document).ready(function() {
-	p3dliteInitProgressButton();
+	if (document.getElementById('p3dlite-pickfiles'))
+		p3dliteInitProgressButton();
 });
 
 function p3dliteChangeModelColor(color) {
@@ -452,13 +458,76 @@ function p3dliteSelectFilament(obj) {
 	else
 		p3dliteChangeModelColor(jQuery(obj).attr('data-color'));
 
-	jQuery.cookie('p3dlite_material', jQuery(obj).find('input').attr('data-id'), { expires: 2 });
+	jQuery.cookie('p3dlite_material', jQuery(obj).find('input').attr('data-id'), { expires: p3dlite.cookie_expire });
+
+	//check compatible printers
+	var compatible_printers = new Array();
+	jQuery('input[name=product_printer]').each(function() {
+		var materials = jQuery(this).data('materials')+'';
+		var materials_array = materials.split(',');
+
+		if (materials.length>0 && jQuery.inArray(material_id+'', materials_array)==-1) {
+			jQuery(this).prop('disabled', true);
+			jQuery(this).prop('checked', false);
+			jQuery(this).css('visibility', 'hidden');
+		}
+		else {
+			jQuery(this).prop('disabled', false);
+			jQuery(this).css('visibility', 'visible');
+			compatible_printers.push(this);
+
+		}
+	});
+
+	//check if a compatible printer is already selected
+	var selected = false;
+	for (i=0;i<compatible_printers.length;i++) {
+		if (jQuery('#pa_p3dlite_printer').val()==jQuery(compatible_printers[i]).data('id'))
+			selected = true;
+	}
+	if (!selected) {
+		jQuery(compatible_printers[0]).prop('checked', true);		
+		p3dliteSelectPrinter(jQuery(compatible_printers[0]).parent());
+	}
+
+	//check compatible coatings
+	var compatible_coatings = new Array();
+
+	jQuery('input[name=product_coating]').each(function() {
+		var materials = jQuery(this).data('materials')+'';
+		var materials_array = materials.split(',');
+
+			if (materials.length>0 && jQuery.inArray(material_id+'', materials_array)==-1) {
+			jQuery(this).prop('disabled', true);
+			jQuery(this).prop('checked', false);
+			jQuery(this).css('visibility', 'hidden');
+		}
+		else {
+			jQuery(this).prop('disabled', false);
+			jQuery(this).css('visibility', 'visible');
+			compatible_coatings.push(this);
+
+		}
+	});
+
+	//check if a compatible coating is already selected
+	var selected = false;
+	for (i=0;i<compatible_coatings.length;i++) {
+		if (jQuery('#pa_p3dlite_coating').val()==jQuery(compatible_coatings[i]).data('id'))
+			selected = true;
+	}
+	if (!selected && compatible_coatings.length>0) {
+		jQuery(compatible_coatings[0]).prop('checked', true);		
+		p3dliteSelectCoating(jQuery(compatible_coatings[0]).parent());
+	}
+
+
 	if (p3dliteCheckPrintability()) p3dliteGetStats();
 	window.wp.hooks.doAction( '3dprint-lite.selectFilament');
 }
 
 function p3dliteSelectCoating(obj) {
-
+	if (jQuery(obj).find('input[type=radio]').prop('disabled')) return false;
 	jQuery(obj).find('input[type=radio]').attr('checked','true');
 	jQuery('#pa_p3dlite_coating').val(jQuery(obj).find('input').data('id'));
 	coating_id=jQuery(obj).find('input').data('id');
@@ -470,7 +539,7 @@ function p3dliteSelectCoating(obj) {
 		p3dliteChangeModelColor(jQuery('input[name=product_filament]:checked').closest('li').data('color'));
 	}
 
-	jQuery.cookie('p3dlite_coating', jQuery(obj).find('input').attr('data-id'), { expires: 2 });
+	jQuery.cookie('p3dlite_coating', jQuery(obj).find('input').attr('data-id'), { expires: p3dlite.cookie_expire });
 
 	p3dliteGetStats();
 	window.wp.hooks.doAction( '3dprint.selectCoating');
@@ -482,7 +551,7 @@ function p3dliteSelectUnit(obj) {
 	jQuery('#p3dlite_unit').val(jQuery(obj).val());
 	jQuery('#pa_p3dlite_unit').val(jQuery(obj).val());
 	product_unit=jQuery(obj).val();
-	jQuery.cookie('p3dlite_unit', jQuery(obj).val(), { expires: 2 });
+	jQuery.cookie('p3dlite_unit', jQuery(obj).val(), { expires: p3dlite.cookie_expire });
 	printer_id=jQuery('input:radio[name=product_printer]:checked').data('id');
 	p3dliteChangePrinter(printer_id);
 	p3dliteGetStats();
@@ -504,9 +573,10 @@ function p3dliteChangePrinter(printer_id) {
 	p3dliteDrawPrinterBox(scene, printer_id, jQuery('input[name=p3dlite_unit]:checked').val());
 }
 function p3dliteSelectPrinter(obj) {
+	if (jQuery(obj).find('input[type=radio]').prop('disabled')) return false;
 	jQuery(obj).find('input[type=radio]').attr('checked','true');
 	jQuery('#pa_p3dlite_printer').val(jQuery(obj).find('input').data('id'));
-	jQuery.cookie('p3dlite_printer', jQuery(obj).find('input').attr('data-id'), { expires: 2 });
+	jQuery.cookie('p3dlite_printer', jQuery(obj).find('input').attr('data-id'), { expires: p3dlite.cookie_expire });
 	printer_id=jQuery(obj).find('input').data('id');
 	p3dliteChangePrinter(printer_id);
 
@@ -557,25 +627,88 @@ function p3dliteCalculatePrintingCost( product_info ) {
 	
 	printing_volume=product_info['model']['material_volume'];
 
-	if ( material.data('price_type')=='cm3' ) {
-		material_cost=( printing_volume )*material.data('price');
+
+
+	if ( !isNaN ( material.data('price') ) ) {
+		if ( material.data('price_type')=='cm3' ) {
+			material_cost=( printing_volume )*material.data('price');
+		}
+		else if ( material.data('price_type')=='gram' ) {
+			material_cost=product_info['model']['weight']*material.data('price');
+		}
 	}
-	else if ( material.data('price_type')=='gram' ) {
-		material_cost=product_info['model']['weight']*material.data('price');
+	else if ( material.data('price').indexOf(':')>-1 ) {
+
+		var material_volume_pricing_array = material.data('price').split(';');
+		for (var i = 0; i < material_volume_pricing_array.length; i++) {
+			var discount_rule = material_volume_pricing_array[i].split(':');
+			if (discount_rule.length == 2) {
+				var amount = discount_rule[0];
+				var price = discount_rule[1];	
+				if ( material.data('price_type')=='cm3' ) {
+					if (printing_volume >= amount ) 
+						material_cost = printing_volume * price;
+				}
+				else if ( material.data('price_type')=='gram' ) {
+					if (product_info['model']['weight'] >= amount) 
+						material_cost = product_info['model']['weight'] * price;
+				}
+			}
+		}
+	}
+
+	if ( !isNaN ( printer.data('price') ) ) {
+		if ( printer.data('price_type')=="material_volume" ) {
+			printing_cost=printing_volume*printer.data('price');
+		}
+		else if ( printer.data('price_type')=="box_volume" ) {
+			printing_cost=product_info['model']['box_volume']*printer.data('price');
+		}
+		else if ( printer.data('price_type')=="gram" ) {
+			printing_cost=product_info['model']['weight']*printer.data('price');
+		}
 
 	}
+	else if ( printer.data('price').indexOf(':')>-1 ) {
+		var printer_volume_pricing_array = printer.data('price').split(';');
+		for (var i = 0; i < printer_volume_pricing_array.length; i++) {
+			var discount_rule = printer_volume_pricing_array[i].split(':');
+			if (discount_rule.length == 2) {
+				var amount = discount_rule[0];
+				var price = discount_rule[1];	
+				if ( printer.data('price_type')=='material_volume' ) {
+					if (printing_volume >= amount)
+						printing_cost = printing_volume * price;
+				}
+				else if ( printer.data('price_type')=='box_volume' ) {
+					if (product_info['model']['box_volume'] >= amount)
+						printing_cost = product_info['model']['box_volume'] * price;
+				}
+				else if ( printer.data('price_type')=='gram' ) {
+					if (product_info['model']['weight'] >= amount)
+						printing_cost = product_info['model']['weight'] * price;
+				}
+			}
+		}
+	}
 
-	if ( printer.data('price_type')=="material_volume" ) {
-		printing_cost=printing_volume*printer.data('price');
-	}
-	else if ( printer.data('price_type')=="box_volume" ) {
-		printing_cost=product_info['model']['box_volume']*printer.data('price');
-	}
-	else if ( printer.data('price_type')=="gram" ) {
-		printing_cost=product_info['model']['weight']*printer.data('price');
-	}
 	if (typeof(coating.data('price'))!=='undefined') {
-		coating_cost = product_info['model']['surface_area'] * coating.data('price');
+		if ( !isNaN ( coating.data('price') ) ) {
+			coating_cost = product_info['model']['surface_area'] * coating.data('price');
+		}
+		else if ( coating.data('price').indexOf(':')>-1 ) {
+			var surface_area_pricing_array = coating.data('price').split(';');
+			for (var i = 0; i < surface_area_pricing_array.length; i++) {
+				var discount_rule = surface_area_pricing_array[i].split(':');
+				if (discount_rule.length == 2) {
+					var amount = discount_rule[0];
+					var price = discount_rule[1];	
+					if (product_info['model']['surface_area'] >= amount) {
+						coating_cost = product_info['model']['surface_area'] * price;
+					}
+				}
+			}
+		}
 	}
 
 	var total=printing_cost+material_cost+coating_cost;
@@ -785,7 +918,9 @@ function p3dliteDrawPrinterBox(scene, printer_id, product_unit) {
 	}
 
 
-	var printerBox = new JSC3D.Mesh('printerbox');
+	var visible = true;
+	if (p3dlite.printer_color=='') visible = false;
+	var printerBox = new JSC3D.Mesh('printerbox', visible);
 	printerBox.vertexBuffer = [ 
 		planeCenter[0] - printer_dim.x/2, planeCenter[1] - printer_dim.y/2, sceneBox.minZ, 
 		planeCenter[0] - printer_dim.x/2, planeCenter[1] + printer_dim.y/2, sceneBox.minZ, 
@@ -832,7 +967,10 @@ function p3dliteMakeGroundPlane() {
 	var planeZ = sceneBox.minZ;
 	var numOfGridsPerDimension = 10;
 	var sizePerGrid = 2 * planeHalfSize / numOfGridsPerDimension;
-	var groundPlane = new JSC3D.Mesh('groundplane');
+
+	var visible = true;
+	if (p3dlite.plane_color=='') visible = false;
+	var groundPlane = new JSC3D.Mesh('groundplane', visible);
 
 	groundPlane.vertexBuffer = [];
 	for (var i=0; i<=numOfGridsPerDimension; i++) {

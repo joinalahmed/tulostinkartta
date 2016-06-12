@@ -12,6 +12,7 @@ function p3dliteAddPrinter() {
 	jQuery('table.printer').first().clone().insertBefore('#add_printer_button').find('input').val('');
 	jQuery('table.printer').last().find('.remove_printer').remove();
 	jQuery('table.printer').last().find('.item_id').remove();
+	jQuery('table.printer').last().find('tr.printer_materials').remove();
 
 }
 
@@ -31,6 +32,7 @@ function p3dliteAddCoating() {
 	jQuery('table.coating').last().find( ".p3dlite_color_picker" ).wpColorPicker();
 	jQuery('table.coating').last().find('.remove_coating').remove();
 	jQuery('table.coating').last().find('.item_id').remove();
+	jQuery('table.coating').last().find('tr.coating_materials').remove();
 }
 
 function p3dliteRemovePrinter(id) {
@@ -45,3 +47,21 @@ function p3dliteRemoveCoating(id) {
 function p3dliteRemoveRequest(id) {
 	jQuery( '<form action="admin.php?page=3dprint-lite#p3dlite_tabs-4" method="post"><input type="hidden" name="action" value="remove_request"><input type="hidden" name="request_id" value="'+id+'"></form>' ).appendTo('body').submit()
 }
+
+function p3dliteSetMaterialType(obj)  {
+        var material_type = obj.value;
+	jQuery(obj).closest('table.form-table.material').find('tr, a').each(function(i, el){
+		var className = jQuery(el).attr('class');
+		if (typeof(className)!=='undefined') {
+			if (className.indexOf('material')==0) {
+
+				if (className=='material_'+material_type) jQuery(el).show();
+				else jQuery(el).hide();
+			}
+		}
+	});
+}
+
+jQuery(document).ready(function(){
+	jQuery('.sumoselect').SumoSelect({ okCancelInMulti: true, selectAll: true });
+});

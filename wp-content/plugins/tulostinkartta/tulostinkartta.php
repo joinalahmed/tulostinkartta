@@ -267,10 +267,10 @@ function printjob_updated() {
         $recipient = $vastaanottaja;
         $sender = $kirjoittaja;
         update_post_meta($post->ID, "tilausaika",$today);
-        require_once(__ROOT__.'/wp-content/plugins/tulostinkartta/block_io.php'); 
-        $apiKey = get_option( 'blockio_api_key' );  
+        require_once('/var/www/dev/wp-content/plugins/tulostinkartta/block_io.php'); 
+        $apiKey = get_option( 'blockio_api_key_0' );  
     	$version = 2; 
-        $pin = get_option( 'blockio_pin' );    
+        $pin = get_option( 'blockio_pin_1' );    
     	$block_io = new BlockIo($apiKey, $pin, $version);    	
    	    $amounts = get_post_meta($post->ID, "bitcoin_hinta",true);
 	    $amounts = floatval($amounts);
@@ -293,10 +293,10 @@ function printjob_updated() {
         $recipient = $vastaanottaja;
         $sender = $kirjoittaja;
         update_post_meta($post->ID, "valmisaika",$today);
-        require_once(__ROOT__.'/wp-content/plugins/tulostinkartta/block_io.php'); 
-        $apiKey = get_option( 'blockio_api_key' );  
+        require_once('/var/www/dev/wp-content/plugins/tulostinkartta/block_io.php'); 
+        $apiKey = get_option( 'blockio_api_key_0' );  
     	$version = 2; 
-        $pin = get_option( 'blockio_pin' );    
+        $pin = get_option( 'blockio_pin_1' );    
         $block_io = new BlockIo($apiKey, $pin, $version);   
         $amounts = get_post_meta($post->ID, "bitcoin_hinta",true);
         $amounts = floatval($amounts);
@@ -609,11 +609,11 @@ function printjob_peruutettu() {
 
 function tt_update_kurssi() {
     global $wpdb;
-    require_once(__ROOT__.'/wp-content/plugins/tulostinkartta/block_io.php'); 
-    $apiKey = get_option( 'blockio_api_key' );  
-    $version = 2; 
-    $pin = get_option( 'blockio_pin' );    
-    $block_io = new BlockIo($apiKey, $pin, $version);
+    require_once('/var/www/dev/wp-content/plugins/tulostinkartta/block_io.php'); 
+ $tulostinkartta_options = get_option( 'tulostinkartta_option_name' );
+ $apiKey = $tulostinkartta_options['blockio_api_key_0'];
+ $pin = $tulostinkartta_options['blockio_pin_1'];
+    $block_io = new BlockIo($apiKey, $pin, 2);
     $accountbalance = $block_io->get_current_price(array('price_base' => 'EUR'));
     $accountbalance = $accountbalance->data->prices;
     $accountbalance = $accountbalance[0]; 
@@ -625,11 +625,7 @@ function tt_update_kurssi() {
 
 function tt_blockio_accounts() {
     global $wpdb;
-    require_once(__ROOT__.'/wp-content/plugins/tulostinkartta/block_io.php'); 
-    $apiKey = get_option( 'blockio_api_key' );  
-    $version = 2; 
-    $pin = get_option( 'blockio_pin' );    
-    $block_io = new BlockIo($apiKey, $pin, $version);
+    require_once('/var/www/dev/wp-content/plugins/tulostinkartta/block_io.php'); 
     $table_name = $wpdb->prefix . "users";
     $users = $wpdb->get_results( "SELECT * FROM " . $table_name);
     foreach ($users as $user) {
@@ -637,9 +633,19 @@ function tt_blockio_accounts() {
               $key = 'btc_address';
               $single = true;
               $btc_address = get_user_meta( $user_id, $key, $single );
+              $tulostinkartta_options = get_option( 'tulostinkartta_option_name' );
+              $apiKey = $tulostinkartta_options['blockio_api_key_0'];
+              $pin = $tulostinkartta_options['blockio_pin_1'];
+              $block_io = new BlockIo($apiKey, $pin, 2);
+
+	      $newAddressInfo = $block_io->get_address_by_label(array('label' => $user_id));
+              update_user_meta($user_id,"btc_address",$newAddressInfo->data->address);
+              $btc_address = get_user_meta( $user_id, $key, $single );
+
               if (empty($btc_address)) { 
-              	 $newAddressInfo = $block_io->get_new_address(array('label' => $user_id));
-                 update_user_meta($user_id,"btc_address",$newAddressInfo->data->address);                   
+	          $tulostinkartta_options = get_option( 'tulostinkartta_option_name' );
+                  $newAddressInfo = $block_io->get_new_address(array('label' => $user_id));
+                  update_user_meta($user_id,"btc_address",$newAddressInfo->data->address);                   
     		  } else { 
 		         $newAddressInfo = $block_io->get_address_by_label(array('label' => $user_id));
 		         update_user_meta($user_id,"btc_address",$newAddressInfo->data->address);                   
@@ -687,11 +693,11 @@ class BTC_Vimpain extends WP_Widget {
     
 function tt_blockio_balances() {
     global $wpdb;
-    require_once(__ROOT__.'/wp-content/plugins/tulostinkartta/block_io.php'); 
-    $apiKey = get_option( 'blockio_api_key' );  
-    $version = 2; 
-    $pin = get_option( 'blockio_pin' );    
-    $block_io = new BlockIo($apiKey, $pin, $version);
+    require_once('/var/www/dev/wp-content/plugins/tulostinkartta/block_io.php');
+    $tulostinkartta_options = get_option( 'tulostinkartta_option_name' );
+    $apiKey = $tulostinkartta_options['blockio_api_key_0'];
+    $pin = $tulostinkartta_options['blockio_pin_1'];
+    $block_io = new BlockIo($apiKey, $pin, 2);
     $table_name = $wpdb->prefix . "users";
     $users = $wpdb->get_results( "SELECT * FROM " . $table_name);
     foreach ($users as $user) {
@@ -743,11 +749,11 @@ function tulostinkartta_bittikukkaro() {
 		  if (!empty($_POST["to"])) {
             	     if (!empty($_POST["amount"])) {
 		        $to = $_POST["to"];
-                	require_once(__ROOT__.'/wp-content/plugins/tulostinkartta/block_io.php');                 										  
-			$apiKey = get_option( 'blockio_api_key' );  
-    	        	$version = 2; 
-                	$pin = get_option( 'blockio_pin' );    
-			$block_io = new BlockIo($apiKey, $pin, $version); 
+    			require_once('/var/www/dev/wp-content/plugins/tulostinkartta/block_io.php');
+ 			$tulostinkartta_options = get_option( 'tulostinkartta_option_name' );
+ 			$apiKey = $tulostinkartta_options['blockio_api_key_0'];
+			$pin = $tulostinkartta_options['blockio_pin_1'];
+			$block_io = new BlockIo($apiKey, $pin, 2); 
 			$from_addresses = get_user_meta($current_user_ID,"btc_address",true);
 			$to_addresses = $_POST["to"];
 			$amounts = $_POST["amount"];
@@ -757,7 +763,7 @@ function tulostinkartta_bittikukkaro() {
 			echo var_dump($tulos);
 			} 
           	 }
-				tt_blockio_accounts();
+
 			        tt_blockio_balances();
             			echo "<h1>Bitcoin-tilisi</h1>";
             			echo "<p>BTC balance: " . get_user_meta($current_user_ID,"btc_available",true) . "</p>";
@@ -882,9 +888,3 @@ class Tulostinkartta {
 if ( is_admin() )
 	$tulostinkartta = new Tulostinkartta();
 
-/* 
- * Retrieve this value with:
- * $tulostinkartta_options = get_option( 'tulostinkartta_option_name' ); // Array of All Options
- * $blockio_api_key_0 = $tulostinkartta_options['blockio_api_key_0']; // blockio_api_key
- * $blockio_pin_1 = $tulostinkartta_options['blockio_pin_1']; // blockio_pin
- */

@@ -1,10 +1,11 @@
 <?php
 /*
-Plugin Name: 3DPrint Lite Forked (Sorry)
+Plugin Name: 3DPrint Lite
 Description: A plugin for selling 3D printing services.
 Author: Sergey Burkov
+Text Domain: 3dprint-lite
 Plugin URI: http://www.wp3dprinting.com
-Version: 1.3
+Version: 1.5.2.1
 */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -29,4 +30,17 @@ else {
 
 register_activation_hook( __FILE__, 'p3dlite_activate' );
 register_deactivation_hook( __FILE__, 'p3dlite_deactivate' );
+
+add_action('init', 'p3dlite_check_installation');
+function p3dlite_check_installation() {
+	if ( ! function_exists( 'get_plugin_data' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/plugin.php';
+	}
+	$p3d_plugin_data = get_plugin_data(  __FILE__ );
+	$p3d_current_version = get_option('p3dlite_version');
+
+	if (!empty($p3d_current_version) && version_compare($p3d_current_version, $p3d_plugin_data['Version'], '<')) {
+		//p3dlite_activate();
+	}
+}
 ?>

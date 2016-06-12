@@ -31,6 +31,19 @@ function register_3dprintlite_menu_page_callback() {
 		unset( $materials_array[$_POST['material_id']] );
 		$materials_array=array_values( $materials_array );
 		update_option( 'p3dlite_materials', $materials_array );
+
+		$printers_array = get_option( 'p3dlite_printers' );
+		foreach ($printers_array as $printer_key => $printer) {
+			if (count($printer['materials'])) {
+				foreach ($printer['materials'] as $material_key => $material_id) {
+					if ($_POST['material_id']==$material_id)
+						unset ( $printers_array[$printer_key]['materials'][$material_key] );
+				}
+			}
+		}
+
+		update_option( 'p3dlite_printers', $printers_array );
+
 	}
 
 	if ( isset( $_POST['action'] ) && $_POST['action']=='remove_coating' ) {
@@ -51,8 +64,11 @@ function register_3dprintlite_menu_page_callback() {
 			$printers[$i]['width']=(float)( $_POST['p3dlite_printer_width'][$i] );
 			$printers[$i]['length']=(float)( $_POST['p3dlite_printer_length'][$i] );
 			$printers[$i]['height']=(float)( $_POST['p3dlite_printer_height'][$i] );
-			$printers[$i]['price']=(float)( $_POST['p3dlite_printer_price'][$i] );
+			$printers[$i]['price']= $_POST['p3dlite_printer_price'][$i] ;
 			$printers[$i]['price_type']=$_POST['p3dlite_printer_price_type'][$i];
+			if ( isset($_POST['p3dlite_printer_materials']) && count( $_POST['p3dlite_printer_materials'][$i] )>0 ) {
+				$printers[$i]['materials']=$_POST['p3dlite_printer_materials'][$i];
+			}
 		}
 
 		update_option( 'p3dlite_printers', $printers );
@@ -62,15 +78,19 @@ function register_3dprintlite_menu_page_callback() {
 
 		for ( $i=0;$i<count( $_POST['p3dlite_material_name'] );$i++ ) {
 
-			if ( !empty( $_POST['p3dlite_material_diameter'][$i] ) && !empty( $_POST['p3dlite_material_length'][$i] ) && !empty( $_POST['p3dlite_material_weight'][$i] ) ) {
+			if ( $_POST['p3dlite_material_type'][$i]=='filament' && !empty( $_POST['p3dlite_material_diameter'][$i] ) && !empty( $_POST['p3dlite_material_length'][$i] ) && !empty( $_POST['p3dlite_material_weight'][$i] ) ) {
 				$materials[$i]['density']=round( ( $_POST['p3dlite_material_weight'][$i]*1000 )/( M_PI*( pow( $_POST['p3dlite_material_diameter'][$i], 2 )/4 )*$_POST['p3dlite_material_length'][$i] ), 2 );
+			}
+			else {
+				$materials[$i]['density']=$_POST['p3dlite_material_density'][$i];
 			}
 
 			$materials[$i]['name']=sanitize_text_field( $_POST['p3dlite_material_name'][$i] );
+			$materials[$i]['type'] = $_POST['p3dlite_material_type'][$i] ;
 			$materials[$i]['diameter']=(float)( $_POST['p3dlite_material_diameter'][$i] );
 			$materials[$i]['length']=(float)( $_POST['p3dlite_material_length'][$i] );
 			$materials[$i]['weight']=(float)( $_POST['p3dlite_material_weight'][$i] );
-			$materials[$i]['price']=(float)( $_POST['p3dlite_material_price'][$i] );
+			$materials[$i]['price']=$_POST['p3dlite_material_price'][$i];
 			$materials[$i]['price_type']=$_POST['p3dlite_material_price_type'][$i];
 			$materials[$i]['roll_price']=(float)( $_POST['p3dlite_material_roll_price'][$i] );
 			$materials[$i]['color']=$_POST['p3dlite_material_color'][$i];
@@ -84,8 +104,13 @@ function register_3dprintlite_menu_page_callback() {
 		for ( $i=0;$i<count( $_POST['p3dlite_coating_name'] );$i++ ) {
 
 			$coatings[$i]['name']=sanitize_text_field( $_POST['p3dlite_coating_name'][$i] );
-			$coatings[$i]['price']=(float)( $_POST['p3dlite_coating_price'][$i] );
+			$coatings[$i]['price']= $_POST['p3dlite_coating_price'][$i] ;
 			$coatings[$i]['color']=$_POST['p3dlite_coating_color'][$i];
+
+			if ( isset($_POST['p3dlite_coating_materials']) && count( $_POST['p3dlite_coating_materials'][$i] )>0 ) {
+
+				$coatings[$i]['materials']=$_POST['p3dlite_coating_materials'][$i];
+			}
 
 		}
 
@@ -114,14 +139,15 @@ function register_3dprintlite_menu_page_callback() {
 					$db_materials=get_option( 'p3dlite_materials' );
 					$db_coatings=get_option( 'p3dlite_coatings' );
 					$upload_dir = wp_upload_dir();
-					$link = $upload_dir['baseurl'].'/p3d/'.$filename;
+					$link = $upload_dir['baseurl'].'/p3d/'.urlencode($filename);
 					$subject=__( "Your model's price" , '3dprint-lite' );
 
 					$message="";
-					$message.=__( "Printer:" , '3dprint-lite' )." ".$db_printers[$printer_id]['name']." <br>";
-					$message.=__( "Material:" , '3dprint-lite' )." ".$db_materials[$material_id]['name']." <br>";
-					$message.=__( "Coating:" , '3dprint-lite' )." ".$db_coatings[$coating_id]['name']." <br>";
+					$message.=__( "Printer:" , '3dprint-lite' )." ".__($db_printers[$printer_id]['name'], '3dprint-lite')." <br>";
+					$message.=__( "Material:" , '3dprint-lite' )." ".__($db_materials[$material_id]['name'], '3dprint-lite')." <br>";
+					$message.=__( "Coating:" , '3dprint-lite' )." ".__($db_coatings[$coating_id]['name'], '3dprint-lite')." <br>";
 					$message.=__( "Model:" , '3dprint-lite' )." <a href='".$link."'>".$filename."</a> <br>";
+
 
 					foreach ( $variation as $key => $value ) {
 						if ( strpos( $key, 'attribute_' )===0 ) {
@@ -153,7 +179,7 @@ function register_3dprintlite_menu_page_callback() {
 ?>
 <script language="javascript">
 
-function calculate_filament_price(material_obj) {
+function p3dliteCalculateFilamentPrice(material_obj) {
 	var diameter=parseFloat(jQuery(material_obj).closest('table.material').find('input.p3dlite_diameter').val());
 	var length=parseFloat(jQuery(material_obj).closest('table.material').find('input.p3dlite_length').val());
 	var weight=parseFloat(jQuery(material_obj).closest('table.material').find('input.p3dlite_weight').val());
@@ -269,6 +295,16 @@ function calculate_filament_price(material_obj) {
 						<td><input size="3" type="text"  placeholder="<?php _e( 'Width', '3dprint-lite' );?>" name="p3dlite_settings[canvas_width]" value="<?php echo $settings['canvas_width'];?>">px &times; <input size="3"  type="text" placeholder="<?php _e( 'Height', '3dprint-lite' );?>" name="p3dlite_settings[canvas_height]" value="<?php echo $settings['canvas_height'];?>">px</td>
 					</tr>
 					<tr>
+						<td><?php _e( 'Cookie Lifetime', '3dprint' );?></td>
+						<td>
+							<select name="p3dlite_settings[cookie_expire]">
+								<option <?php if ( $settings['cookie_expire']=='0' ) echo 'selected';?> value="0">0 <?php _e( '(no cookies)', '3dprint-lite' );?> 
+								<option <?php if ( $settings['cookie_expire']=='1' ) echo 'selected';?> value="1">1
+								<option <?php if ( $settings['cookie_expire']=='2' ) echo 'selected';?> value="2">2
+							</select> <?php _e( 'days', '3dprint-lite' );?> 
+						</td>
+					</tr>
+					<tr>
 						<td><?php _e( 'Background 1', '3dprint-lite' );?></td>
 						<td><input type="text" class="p3dlite_color_picker" name="p3dlite_settings[background1]" value="<?php echo $settings['background1'];?>"></td>
 					</tr>
@@ -285,6 +321,26 @@ function calculate_filament_price(material_obj) {
 						<td><input type="text" class="p3dlite_color_picker" name="p3dlite_settings[printer_color]" value="<?php echo $settings['printer_color'];?>"></td>
 					</tr>
 					<tr>
+						<td><?php _e( 'Button Background', '3dprint-lite' );?></td>
+						<td><input type="text" class="p3dlite_color_picker" name="p3dlite_settings[button_color1]" value="<?php echo $settings['button_color1'];?>"></td>
+					</tr>
+					<tr>
+						<td><?php _e( 'Button Shadow', '3dprint-lite' );?></td>
+						<td><input type="text" class="p3dlite_color_picker" name="p3dlite_settings[button_color2]" value="<?php echo $settings['button_color2'];?>"></td>
+					</tr>
+					<tr>
+						<td><?php _e( 'Button Progress Bar', '3dprint-lite' );?></td>
+						<td><input type="text" class="p3dlite_color_picker" name="p3dlite_settings[button_color3]" value="<?php echo $settings['button_color3'];?>"></td>
+					</tr>
+					<tr>
+						<td><?php _e( 'Button Font', '3dprint-lite' );?></td>
+						<td><input type="text" class="p3dlite_color_picker" name="p3dlite_settings[button_color4]" value="<?php echo $settings['button_color4'];?>"></td>
+					</tr>
+					<tr>
+						<td><?php _e( 'Button Tick', '3dprint-lite' );?></td>
+						<td><input type="text" class="p3dlite_color_picker" name="p3dlite_settings[button_color5]" value="<?php echo $settings['button_color5'];?>"></td>
+					</tr>
+					<tr>
 						<td><?php _e( 'Zoom', '3dprint-lite' );?></td>
 						<td><input size="3" type="text" name="p3dlite_settings[zoom]" value="<?php echo $settings['zoom'];?>"></td>
 					</tr>
@@ -299,7 +355,27 @@ function calculate_filament_price(material_obj) {
 					<tr>
 						<td><?php _e( 'Angle Z', '3dprint-lite' );?></td>
 						<td><input size="3" type="text" name="p3dlite_settings[angle_z]" value="<?php echo $settings['angle_z'];?>">&deg;</td>
-				</tr>
+					</tr>
+					<tr>
+						<td><?php _e( 'Show Canvas Stats', '3dprint-lite' );?></td>
+						<td><input type="checkbox" name="p3dlite_settings[canvas_stats]" <?php if ($settings['canvas_stats']=='on') echo 'checked';?>></td>
+					</tr>
+					<tr>
+						<td><?php _e( 'Show Model Stats', '3dprint' );?></td>
+						<td><input type="checkbox" name="p3dlite_settings[model_stats]" <?php if ($settings['model_stats']=='on') echo 'checked';?>></td>
+					</tr>
+					<tr>
+						<td><?php _e( 'Show Printers', '3dprint-lite' );?></td>
+						<td><input type="checkbox" name="p3dlite_settings[show_printers]" <?php if ($settings['show_printers']=='on') echo 'checked';?>></td>
+					</tr>
+					<tr>
+						<td><?php _e( 'Show Materials', '3dprint-lite' );?></td>
+						<td><input type="checkbox" name="p3dlite_settings[show_materials]" <?php if ($settings['show_materials']=='on') echo 'checked';?>></td>
+					</tr>
+					<tr>
+						<td><?php _e( 'Show Coatings', '3dprint-lite' );?></td>
+						<td><input type="checkbox" name="p3dlite_settings[show_coatings]" <?php if ($settings['show_coatings']=='on') echo 'checked';?>></td>
+					</tr>
 				</table>
 				<hr>
 				<p><b><?php _e( 'File Upload', '3dprint-lite' );?></b></p>
@@ -359,11 +435,25 @@ function calculate_filament_price(material_obj) {
 						<td><input type="text" name="p3dlite_printer_price[]" value="0.05" /><?php echo $settings['currenct']; ?> <?php _e( 'per', '3dprint-lite' );?>
 							<select name="p3dlite_printer_price_type[]">
 								<option value="box_volume"><?php _e( '1 cm3 of Bounding Box Volume', '3dprint-lite' );?></option>
-								<option value="material_volume"><?php _e( '1 cm3 of Filament Volume', '3dprint-lite' );?></option>
-								<option value="gram"><?php _e( '1 gram of Filament', '3dprint-lite' );?></option>
+								<option value="material_volume"><?php _e( '1 cm3 of Material Volume', '3dprint-lite' );?></option>
+								<option value="gram"><?php _e( '1 gram of Material', '3dprint-lite' );?></option>
 		 					</select>
 						</td>
 					</tr>
+
+					<tr class="printer_materials" valign="top">
+						<th scope="row"><?php _e( 'Materials', '3dprint-lite' ); ?></th>
+						<td>
+							<select autocomplete="off" name="p3dlite_printer_materials[0][]" multiple="multiple" class="sumoselect">
+								<?php 
+									for ($j=0; $j<count($materials); $j++) {
+										echo '<option value="'.$j.'">'.$materials[$j]['name'];
+									}
+								?>
+							</select>
+						</td>
+					</tr>
+
 
 				</table>
 			<?php } ?>
@@ -395,17 +485,17 @@ function calculate_filament_price(material_obj) {
 					</tr>
 
 					<tr valign="top">
-						<th scope="row"><?php _e( 'Printer Length', '3dprint-lite' ); ?></th>
+						<th scope="row"><?php _e( 'Build Tray Length', '3dprint-lite' ); ?></th>
 						<td><input type="text" name="p3dlite_printer_length[]" value="<?php echo $printer['length'];?>" /><?php _e( 'mm', '3dprint-lite' );?></td>
 					</tr>
 
 					<tr valign="top">
-						<th scope="row"><?php _e( 'Printer Width', '3dprint-lite' ); ?></th>
+						<th scope="row"><?php _e( 'Build Tray Width', '3dprint-lite' ); ?></th>
 						<td><input type="text" name="p3dlite_printer_width[]" value="<?php echo $printer['width'];?>" /><?php _e( 'mm', '3dprint-lite' );?></td>
 					</tr>
 
 					<tr valign="top">
-						<th scope="row"><?php _e( 'Printer Height', '3dprint-lite' ); ?></th>
+						<th scope="row"><?php _e( 'Build Tray Height', '3dprint-lite' ); ?></th>
 						<td><input type="text" name="p3dlite_printer_height[]" value="<?php echo $printer['height'];?>" /><?php _e( 'mm', '3dprint-lite' );?></td>
 					</tr>
 
@@ -417,11 +507,26 @@ function calculate_filament_price(material_obj) {
 							<input type="text" name="p3dlite_printer_price[]" value="<?php echo $printer['price'];?>" /><?php echo $settings['currency']; ?> <?php _e( 'per', '3dprint-lite' );?>
 							<select name="p3dlite_printer_price_type[]">
 								<option <?php if ( $printer['price_type']=='box_volume' ) echo "selected";?> value="box_volume"><?php _e( '1 cm3 of Bounding Box Volume', '3dprint-lite' );?></option>
-								<option <?php if ( $printer['price_type']=='material_volume' ) echo "selected";?> value="material_volume"><?php _e( '1 cm3 of Filament Volume', '3dprint-lite' );?></option>
-								<option <?php if ( $printer['price_type']=='gram' ) echo "selected";?> value="gram"><?php _e( '1 gram of Filament', '3dprint-lite' );?></option>
+								<option <?php if ( $printer['price_type']=='material_volume' ) echo "selected";?> value="material_volume"><?php _e( '1 cm3 of Material Volume', '3dprint-lite' );?></option>
+								<option <?php if ( $printer['price_type']=='gram' ) echo "selected";?> value="gram"><?php _e( '1 gram of Material', '3dprint-lite' );?></option>
 							</select>
 						</td>
 					</tr>
+
+					<tr class="printer_materials" valign="top">
+						<th scope="row"><?php _e( 'Materials', '3dprint-lite' ); ?></th>
+						<td>
+							<select autocomplete="off" name="p3dlite_printer_materials[<?php echo $i;?>][]" multiple="multiple" class="sumoselect">
+								<?php 
+									for ($j=0; $j<count($materials); $j++) {
+										if (is_array($printer['materials']) && in_array($j, $printer['materials'])) $selected="selected"; else $selected="";
+										echo '<option '.$selected.' value="'.$j.'">'.$materials[$j]['name'];
+									}
+								?>
+							</select>
+						</td>
+					</tr>
+
 
 				</table>
 <?php
@@ -441,16 +546,27 @@ function calculate_filament_price(material_obj) {
 		<div id="p3dlite_tabs-2">
 			<form method="post" action="admin.php?page=3dprint-lite#p3dlite_tabs-2">
 <?php
-	if ( !$materials || count( $materials )==0 ) {
+	if ( !is_array($materials) || count( $materials )==0 ) {
 ?>
 				<table class="form-table material">
 					<tr>
 						<td colspan="2"><hr></td>
 					</tr>
 					<tr valign="top">
-						<th scope="row"><?php _e( 'Filament Name', '3dprint-lite' );?></th>
+						<th scope="row"><?php _e( 'Material Name', '3dprint-lite' );?></th>
 						<td><input type="text" name="p3dlite_material_name[]" value="ABS (1.75mm)" /></td>
 					</tr>
+
+				 	<tr valign="top">
+						<th scope="row"><?php _e( 'Material Type', '3dprint-lite' );?></th>
+						<td>
+							<select name="p3dlite_material_type[]" onchange="p3dliteSetMaterialType(this)">
+								<option value="filament"><?php _e( 'Filament', '3dprint-lite' );?>
+								<option value="other"><?php _e( 'Other', '3dprint-lite' );?>
+							</select>
+						</td>
+					</tr>
+
 
 					<tr valign="top">
 						<th scope="row"><?php _e( 'Price', '3dprint-lite' ); ?></th>
@@ -460,38 +576,38 @@ function calculate_filament_price(material_obj) {
 								<option value="cm3"><?php _e( '1 cm3', '3dprint-lite' );?></option>
 								<option value="gram"><?php _e( '1 gram', '3dprint-lite' );?></option>
 							</select>
-							<a onclick="javascript:calculate_filament_price(this)" href="javascript:void(0)"><?php _e( 'Calculate', '3dprint-lite' );?></a>
+							<a class="material_filament" onclick="javascript:p3dliteCalculateFilamentPrice(this)" href="javascript:void(0)"><?php _e( 'Calculate', '3dprint-lite' );?></a>
 					 	</td>
 					</tr>
 
-					<tr style="display:none;" valign="top">
-						<th scope="row"><?php _e( 'Filament Density', '3dprint-lite' );?></th>
+					<tr class="material_other" valign="top">
+						<th scope="row"><?php _e( 'Material Density', '3dprint-lite' );?></th>
 						<td><input type="text" name="p3dlite_material_density[]" value="0" /><?php _e( 'g/cm3', '3dprint-lite' );?></td>
 					</tr>
 
-					<tr valign="top">
+					<tr class="material_filament" valign="top">
 						<th scope="row"><?php _e( 'Filament Diameter', '3dprint-lite' );?></th>
 						<td><input type="text" class="p3dlite_diameter" name="p3dlite_material_diameter[]" value="1.75" /><?php _e( 'mm', '3dprint-lite' );?></td>
 					</tr>
 
-					<tr valign="top">
+					<tr class="material_filament" valign="top">
 						<th scope="row"><?php _e( 'Filament Length', '3dprint-lite' );?></th>
 						<td><input type="text" class="p3dlite_length" name="p3dlite_material_length[]" value="330" /><?php _e( 'm', '3dprint-lite' );?></td>
 					</tr>
 
-					<tr valign="top">
+					<tr class="material_filament" valign="top">
 						<th scope="row"><?php _e( 'Roll Weight', '3dprint-lite' );?></th>
 						<td><input type="text" class="p3dlite_weight" name="p3dlite_material_weight[]" value="1" /><?php _e( 'kg', '3dprint-lite' );?></td>
 					</tr>
 
-					<tr valign="top">
+					<tr class="material_filament" valign="top">
 						<th scope="row"><?php _e( 'Roll Price', '3dprint-lite' );?></th>
 						<td><input type="text" class="p3dlite_roll_price" name="p3dlite_material_roll_price[]" value="20" /><?php echo $settings['currency']; ?></td>
 					</tr>
 
 
 					<tr valign="top">
-						<th scope="row"><?php _e( 'Filament Color', '3dprint-lite' );?></th>
+						<th scope="row"><?php _e( 'Material Color', '3dprint-lite' );?></th>
 						<td class="color_td"><input type="text" class="p3dlite_color_picker" name="p3dlite_material_color[]" value="" /></td>
 					</tr>
 				</table>
@@ -509,12 +625,22 @@ function calculate_filament_price(material_obj) {
 						<td colspan="2"><span class="item_id"><?php echo "<b>ID #$i</b>";?></span></td>
 				 	</tr>
 				 	<tr valign="top">
-					<th scope="row"><?php _e( 'Filament Name', '3dprint-lite' );?></th>
+					<th scope="row"><?php _e( 'Material Name', '3dprint-lite' );?></th>
 						<td>
 							<input type="text" name="p3dlite_material_name[]" value="<?php echo $material['name'];?>" />&nbsp;
 							<a class="remove_material" href="javascript:void(0);" onclick="p3dliteRemoveMaterial(<?php echo $i;?>);return false;">
-								<img alt="<?php _e( 'Remove Filament', '3dprint-lite' );?>" title="<?php _e( 'Remove Filament', '3dprint-lite' );?>" src="<?php echo plugins_url( '3dprint-lite/images/remove.png' ); ?>">
+								<img alt="<?php _e( 'Remove Material', '3dprint-lite' );?>" title="<?php _e( 'Remove Material', '3dprint-lite' );?>" src="<?php echo plugins_url( '3dprint-lite/images/remove.png' ); ?>">
 					 		</a>
+						</td>
+					</tr>
+
+				 	<tr valign="top">
+						<th scope="row"><?php _e( 'Material Type', '3dprint-lite' );?></th>
+						<td>
+							<select class="select_material" name="p3dlite_material_type[]" onchange="p3dliteSetMaterialType(this)">
+								<option <?php if ( $material['type']=='filament' ) echo "selected";?> value="filament"><?php _e( 'Filament', '3dprint-lite' );?>
+								<option <?php if ( $material['type']=='other' ) echo "selected";?> value="other"><?php _e( 'Other', '3dprint-lite' );?>
+							</select>
 						</td>
 					</tr>
 
@@ -526,39 +652,39 @@ function calculate_filament_price(material_obj) {
 								<option <?php if ( $material['price_type']=='cm3' ) echo "selected";?> value="cm3"><?php _e( '1 cm3', '3dprint-lite' );?></option>
 								<option <?php if ( $material['price_type']=='gram' ) echo "selected";?> value="gram"><?php _e( '1 gram', '3dprint-lite' );?></option>
 							</select>
-							<a onclick="javascript:calculate_filament_price(this)" href="javascript:void(0)"><?php _e( 'Calculate', '3dprint-lite' );?></a>
+							<a class="material_filament" onclick="javascript:p3dliteCalculateFilamentPrice(this)" href="javascript:void(0)"><?php _e( 'Calculate', '3dprint-lite' );?></a>
 						</td>
 					</tr>
 
-					<tr style="display:none;" valign="top">
-						<th scope="row"><?php _e( 'Filament Density', '3dprint-lite' );?></th>
+					<tr class="material_other" valign="top">
+						<th scope="row"><?php _e( 'Material Density', '3dprint-lite' );?></th>
 						<td>
 							<input type="text" name="p3dlite_material_density[]" value="<?php echo $material['density'];?>" /><?php _e( 'g/cm3', '3dprint-lite' );?>
 						</td>
 					</tr>
 
-					<tr valign="top">
+					<tr class="material_filament" valign="top">
 						<th scope="row"><?php _e( 'Filament Diameter', '3dprint-lite' );?></th>
 						<td><input type="text" class="p3dlite_diameter" name="p3dlite_material_diameter[]" value="<?php echo $material['diameter'];?>" /><?php _e( 'mm', '3dprint-lite' );?></td>
 					</tr>
 
-					<tr valign="top">
+					<tr class="material_filament" valign="top">
 						<th scope="row"><?php _e( 'Filament Length', '3dprint-lite' );?></th>
 						<td><input type="text" class="p3dlite_length" name="p3dlite_material_length[]" value="<?php echo $material['length'];?>" /><?php _e( 'm', '3dprint-lite' );?></td>
 					</tr>
 
-					<tr valign="top">
+					<tr class="material_filament" valign="top">
 						<th scope="row"><?php _e( 'Roll Weight', '3dprint-lite' );?></th>
 						<td><input type="text" class="p3dlite_weight" name="p3dlite_material_weight[]" value="<?php echo $material['weight'];?>" /><?php _e( 'kg', '3dprint-lite' );?></td>
 					</tr>
 
-					<tr valign="top">
+					<tr class="material_filament" valign="top">
 						<th scope="row"><?php _e( 'Roll Price', '3dprint-lite' );?></th>
 						<td><input type="text" class="p3dlite_roll_price" name="p3dlite_material_roll_price[]" value="<?php echo $material['roll_price'];?>" /><?php echo $settings['currency']; ?></td>
 					</tr>
 
 					<tr valign="top">
-						<th scope="row"><?php _e( 'Filament Color', '3dprint-lite' );?></th>
+						<th scope="row"><?php _e( 'Material Color', '3dprint-lite' );?></th>
 						<td class="color_td"><input type="text" class="p3dlite_color_picker" name="p3dlite_material_color[]" value="<?php echo $material['color'];?>" /></td>
 					</tr>
 				</table>
@@ -604,6 +730,21 @@ function calculate_filament_price(material_obj) {
 						<th scope="row"><?php _e( 'Coating Color', '3dprint-lite' );?></th>
 						<td class="color_td"><input type="text" class="p3dlite_color_picker" name="p3dlite_coating_color[]" value="" /></td>
 					</tr>
+
+					<tr class="coating_materials" valign="top">
+						<th scope="row"><?php _e( 'Materials', '3dprint-lite' ); ?></th>
+						<td>
+							<select autocomplete="off" name="p3dlite_coating_materials[][]" multiple="multiple" class="sumoselect">
+								<?php 
+									for ($j=0; $j<count($materials); $j++) {
+										echo '<option value="'.$j.'">'.$materials[$j]['name'];
+									}
+								?>
+							</select>
+						</td>
+					</tr>
+
+
 				</table>
 			<?php } ?>
 <?php
@@ -638,6 +779,21 @@ function calculate_filament_price(material_obj) {
 					<tr valign="top">
 						<th scope="row"><?php _e( 'Coating Color', '3dprint-lite' );?></th>
 						<td class="color_td"><input type="text" class="p3dlite_color_picker" name="p3dlite_coating_color[]" value="<?php echo $coating['color'];?>" /></td>
+					</tr>
+					<tr class="coating_materials" valign="top">
+						<th scope="row"><?php _e( 'Materials', '3dprint-lite' ); ?></th>
+						<td>
+
+							<select autocomplete="off" name="p3dlite_coating_materials[<?php echo $i;?>][]" multiple="multiple" class="sumoselect">
+								<?php 
+
+									for ($j=0; $j<count($materials); $j++) {
+										if (is_array($coating['materials']) && in_array($j, $coating['materials'])) $selected="selected"; else $selected="";
+										echo '<option '.$selected.' value="'.$j.'">'.$materials[$j]['name'];
+									}
+								?>
+							</select>
+						</td>
 					</tr>
 				</table>
 <?php
@@ -690,18 +846,19 @@ function calculate_filament_price(material_obj) {
 						$attr_st.=__( "Printer" , '3dprint-lite' ).": ".$price_request['printer']."<br>";
 					}
 					elseif ( $attr_key=='attribute_pa_p3dlite_material' ) {
-						$attr_st.=__( "Filament" , '3dprint-lite' ).": ".$price_request['material']."<br>";
+						$attr_st.=__( "Material" , '3dprint-lite' ).": ".$price_request['material']."<br>";
 					}
 					elseif ( $attr_key=='attribute_pa_p3dlite_coating' ) {
 						$attr_st.=__( "Coating" , '3dprint-lite' )." : ".$price_request['coating']."<br>";
 					}
 					elseif ( $attr_key=='attribute_pa_p3dlite_model' ) {
-						$link = $upload_dir['baseurl'].'/p3d/'.basename( $attr_value );
+
+						$link = $upload_dir['baseurl'].'/p3d/'.urlencode( p3dlite_basename( $attr_value ) );
 						if (file_exists($upload_dir['basedir']."/p3d/$attr_value.zip")) {
 							$link="$link.zip";
 							$attr_value="$attr_value.zip";
 						}
-						$attr_st.=__( "Model" , '3dprint-lite' ).": <a href='".$link."'>".basename( $attr_value )."</a><br>";
+						$attr_st.=__( "Model" , '3dprint-lite' ).": <a href='".$link."'>".p3dlite_basename( $attr_value )."</a><br>";
 					}
 					elseif ( $attr_key=='attribute_pa_p3dlite_unit' ) {
 						$attr_st.=__( "Unit" , '3dprint-lite' ).": ".__( $attr_value )."<br>";

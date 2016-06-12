@@ -1,15 +1,15 @@
-# 3D Print Lite.
-# Copyright (C) 2015 Sergey Burkov
-# This file is distributed under the same license as the 3D Print Lite package.
-# Sergey Burkov <fuzzoidsoftware@gmail.com>, 2015.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-11 16:44+0300\n"
-"PO-Revision-Date: 2015-08-11 16:44+0300\n"
+"POT-Creation-Date: 2016-03-25 14:18+0300\n"
+"PO-Revision-Date: 2016-03-25 14:18+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -19,502 +19,627 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: Eazy Po 0.9.5.3\n"
 
-#: upload.php:81
-msgid "Failed to open temp directory."
-msgstr ""
-
-#: upload.php:103
-msgid "Failed to open output stream."
-msgstr ""
-
-#: upload.php:108
-msgid "Failed to move uploaded file."
-msgstr ""
-
-#: upload.php:113 upload.php:117
-msgid "Failed to open input stream."
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:100
+#: includes/3dprint-lite-admin.php:143
 msgid "Your model's price"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:103 includes/3dprint-lite-frontend.php:62
+#: includes/3dprint-lite-admin.php:146 includes/3dprint-lite-frontend.php:75
 msgid "Printer:"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:104 includes/3dprint-lite-frontend.php:63
+#: includes/3dprint-lite-admin.php:147 includes/3dprint-lite-frontend.php:76
 msgid "Material:"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:105 includes/3dprint-lite-frontend.php:64
+#: includes/3dprint-lite-admin.php:148 includes/3dprint-lite-frontend.php:77
+msgid "Coating:"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:149 includes/3dprint-lite-frontend.php:78
 msgid "Model:"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:114
+#: includes/3dprint-lite-admin.php:159
 msgid "Price:"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:115 includes/3dprint-lite-frontend.php:70
+#: includes/3dprint-lite-admin.php:160 includes/3dprint-lite-frontend.php:86
 msgid "Comments:"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:141
+#: includes/3dprint-lite-admin.php:190
 msgid "Please input roll price, diameter and length"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:148
+#: includes/3dprint-lite-admin.php:197
 msgid "Please input price and weight"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:156
+#: includes/3dprint-lite-admin.php:205
+msgid "Shortcode:"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:207
 msgid "3D printing settings"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:161
+#: includes/3dprint-lite-admin.php:212
 msgid "Settings"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:162
+#: includes/3dprint-lite-admin.php:213
 msgid "Printers"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:163
+#: includes/3dprint-lite-admin.php:214 includes/3dprint-lite-admin.php:445
+#: includes/3dprint-lite-admin.php:517 includes/3dprint-lite-admin.php:735
+#: includes/3dprint-lite-admin.php:784
 msgid "Materials"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:164
-msgid "Price Requests"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:168
-msgid "Checkout"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:172
-msgid "Get a Quote"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:176
-msgid "Give an estimate and request price"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:177
-msgid "Request price"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:178
-msgid "Calculate price and allow checkout (Premium only)"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:184
-msgid "Minimum Price"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:192
-msgid "Currency"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:201
-msgid "Product Viewer"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:204
-msgid "Canvas Resolution"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:205
-msgid "Width"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:205
-msgid "Height"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:208
-msgid "Background 1"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:212
-msgid "Background 2"
+#: includes/3dprint-lite-admin.php:215
+msgid "Coatings"
 msgstr ""
 
 #: includes/3dprint-lite-admin.php:216
-msgid "Plane Color"
+msgid "Price Requests"
 msgstr ""
 
 #: includes/3dprint-lite-admin.php:220
-msgid "Printer Color"
+msgid "Pricing"
 msgstr ""
 
 #: includes/3dprint-lite-admin.php:224
-msgid "Zoom"
+msgid "Get a Quote"
 msgstr ""
 
 #: includes/3dprint-lite-admin.php:228
-msgid "Angle X"
+msgid "Give an estimate and request price"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:232
-msgid "Angle Y"
+#: includes/3dprint-lite-admin.php:229
+msgid "Request price"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:230
+msgid "Calculate price and allow checkout (Premium only)"
 msgstr ""
 
 #: includes/3dprint-lite-admin.php:236
-msgid "Angle Z"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:241
-msgid "File Upload"
+msgid "Minimum Price"
 msgstr ""
 
 #: includes/3dprint-lite-admin.php:244
-msgid "Max. File Size"
+msgid "Currency"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:245
-msgid "mb"
+#: includes/3dprint-lite-admin.php:252
+msgid "Currency Position"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:248
-msgid "Allowed Extensions"
+#: includes/3dprint-lite-admin.php:256
+msgid "Left"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:253 includes/3dprint-lite-admin.php:369
-#: includes/3dprint-lite-admin.php:507
-msgid "Save Changes"
+#: includes/3dprint-lite-admin.php:257
+msgid "Left with space"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:268 includes/3dprint-lite-admin.php:319
-msgid "Printer Name"
+#: includes/3dprint-lite-admin.php:258
+msgid "Right"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:273 includes/3dprint-lite-admin.php:330
-msgid "Build Tray Length"
+#: includes/3dprint-lite-admin.php:259
+msgid "Right with space"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:274 includes/3dprint-lite-admin.php:279
-#: includes/3dprint-lite-admin.php:284 includes/3dprint-lite-admin.php:331
-#: includes/3dprint-lite-admin.php:336 includes/3dprint-lite-admin.php:341
-#: includes/3dprint-lite-admin.php:406 includes/3dprint-lite-admin.php:474
-#: includes/3dprint-lite-frontend.php:137
-msgid "mm"
+#: includes/3dprint-lite-admin.php:265
+msgid "Number of Decimals"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:278 includes/3dprint-lite-admin.php:335
-msgid "Build Tray Width"
+#: includes/3dprint-lite-admin.php:273
+msgid "Thousands Separator"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:283 includes/3dprint-lite-admin.php:340
-msgid "Build Tray Height"
+#: includes/3dprint-lite-admin.php:281
+msgid "Decimal Point"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:290 includes/3dprint-lite-admin.php:347
-msgid "Printing Cost"
+#: includes/3dprint-lite-admin.php:291
+msgid "Product Viewer"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:291 includes/3dprint-lite-admin.php:349
-#: includes/3dprint-lite-admin.php:390 includes/3dprint-lite-admin.php:456
-msgid "per"
+#: includes/3dprint-lite-admin.php:294
+msgid "Canvas Resolution"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:293 includes/3dprint-lite-admin.php:351
-msgid "1 cm3 of Bounding Box Volume"
+#: includes/3dprint-lite-admin.php:295
+msgid "Width"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:294 includes/3dprint-lite-admin.php:352
-msgid "1 cm3 of Filament Volume"
+#: includes/3dprint-lite-admin.php:295
+msgid "Height"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:295 includes/3dprint-lite-admin.php:353
-msgid "1 gram of Filament"
+#: includes/3dprint-lite-admin.php:298
+msgid "Cookie Lifetime"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:301
+msgid "(no cookies)"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:304 includes/3dprint-lite-admin.php:393
+msgid "days"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:308
+msgid "Background 1"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:312
+msgid "Background 2"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:316
+msgid "Plane Color"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:320
+msgid "Printer Color"
 msgstr ""
 
 #: includes/3dprint-lite-admin.php:324
-msgid "Remove Printer"
+msgid "Button Background"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:328
+msgid "Button Shadow"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:332
+msgid "Button Progress Bar"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:336
+msgid "Button Font"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:340
+msgid "Button Tick"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:344
+msgid "Zoom"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:348
+msgid "Angle X"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:352
+msgid "Angle Y"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:356
+msgid "Angle Z"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:360
+msgid "Show Canvas Stats"
 msgstr ""
 
 #: includes/3dprint-lite-admin.php:364
+msgid "Show Model Stats"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:368
+msgid "Show Printers"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:372
+msgid "Show Materials"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:376
+msgid "Show Coatings"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:381
+msgid "File Upload"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:384
+msgid "Max. File Size"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:385
+msgid "mb"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:388
+msgid "Allowed Extensions"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:392
+msgid "Delete files older than"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:397 includes/3dprint-lite-admin.php:542
+#: includes/3dprint-lite-admin.php:701 includes/3dprint-lite-admin.php:809
+msgid "Save Changes"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:412 includes/3dprint-lite-admin.php:477
+msgid "Printer Name"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:417
+msgid "Build Tray Length"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:418 includes/3dprint-lite-admin.php:423
+#: includes/3dprint-lite-admin.php:428 includes/3dprint-lite-admin.php:489
+#: includes/3dprint-lite-admin.php:494 includes/3dprint-lite-admin.php:499
+#: includes/3dprint-lite-admin.php:590 includes/3dprint-lite-admin.php:668
+#: includes/3dprint-lite-frontend.php:153
+msgid "mm"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:422
+msgid "Build Tray Width"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:427
+msgid "Build Tray Height"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:434 includes/3dprint-lite-admin.php:505
+msgid "Printing Cost"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:435 includes/3dprint-lite-admin.php:507
+#: includes/3dprint-lite-admin.php:574 includes/3dprint-lite-admin.php:650
+#: includes/3dprint-lite-admin.php:725 includes/3dprint-lite-admin.php:775
+msgid "per"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:437 includes/3dprint-lite-admin.php:509
+msgid "1 cm3 of Bounding Box Volume"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:438 includes/3dprint-lite-admin.php:510
+msgid "1 cm3 of Material Volume"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:439 includes/3dprint-lite-admin.php:511
+msgid "1 gram of Material"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:482
+msgid "Remove Printer"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:488
+msgid "Printer Length"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:493
+msgid "Printer Width"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:498
+msgid "Printer Height"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:537
 msgid "Add Printer"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:383 includes/3dprint-lite-admin.php:444
-msgid "Filament Name"
+#: includes/3dprint-lite-admin.php:556 includes/3dprint-lite-admin.php:628
+msgid "Material Name"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:388 includes/3dprint-lite-admin.php:454
-#: includes/3dprint-lite-admin.php:525
-msgid "Price"
+#: includes/3dprint-lite-admin.php:561 includes/3dprint-lite-admin.php:638
+msgid "Material Type"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:392 includes/3dprint-lite-admin.php:458
-msgid "1 cm3"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:393 includes/3dprint-lite-admin.php:459
-msgid "1 gram"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:395 includes/3dprint-lite-admin.php:461
-msgid "Calculate"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:400 includes/3dprint-lite-admin.php:466
-msgid "Filament Density"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:401 includes/3dprint-lite-admin.php:468
-msgid "g/cm3"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:405 includes/3dprint-lite-admin.php:473
-msgid "Filament Diameter"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:410 includes/3dprint-lite-admin.php:478
-msgid "Filament Length"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:411 includes/3dprint-lite-admin.php:479
-msgid "m"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:415 includes/3dprint-lite-admin.php:483
-msgid "Roll Weight"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:416 includes/3dprint-lite-admin.php:484
-msgid "kg"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:420 includes/3dprint-lite-admin.php:488
-msgid "Roll Price"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:426 includes/3dprint-lite-admin.php:493
-msgid "Filament Color"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:448
-msgid "Remove Filament"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:502
-msgid "Add Material"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:522
-msgid "Page"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:523
-msgid "Customer"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:524
-msgid "Details"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:526
-msgid "Comment"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:545 includes/3dprint-lite-frontend.php:232
-msgid "Printer"
-msgstr ""
-
-#: includes/3dprint-lite-admin.php:548 includes/3dprint-lite-frontend.php:244
+#: includes/3dprint-lite-admin.php:564 includes/3dprint-lite-admin.php:641
 msgid "Filament"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:552
+#: includes/3dprint-lite-admin.php:565 includes/3dprint-lite-admin.php:642
+msgid "Other"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:572 includes/3dprint-lite-admin.php:648
+#: includes/3dprint-lite-admin.php:723 includes/3dprint-lite-admin.php:773
+#: includes/3dprint-lite-admin.php:826
+msgid "Price"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:576 includes/3dprint-lite-admin.php:652
+msgid "1 cm3"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:577 includes/3dprint-lite-admin.php:653
+msgid "1 gram"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:579 includes/3dprint-lite-admin.php:655
+msgid "Calculate"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:584 includes/3dprint-lite-admin.php:660
+msgid "Material Density"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:585 includes/3dprint-lite-admin.php:662
+msgid "g/cm3"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:589 includes/3dprint-lite-admin.php:667
+msgid "Filament Diameter"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:594 includes/3dprint-lite-admin.php:672
+msgid "Filament Length"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:595 includes/3dprint-lite-admin.php:673
+msgid "m"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:599 includes/3dprint-lite-admin.php:677
+msgid "Roll Weight"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:600 includes/3dprint-lite-admin.php:678
+msgid "kg"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:604 includes/3dprint-lite-admin.php:682
+msgid "Roll Price"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:610 includes/3dprint-lite-admin.php:687
+msgid "Material Color"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:632
+msgid "Remove Material"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:696
+msgid "Add Material"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:718 includes/3dprint-lite-admin.php:763
+msgid "Coating Name"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:725 includes/3dprint-lite-admin.php:775
+msgid "cm2 of surface area"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:730 includes/3dprint-lite-admin.php:780
+msgid "Coating Color"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:767
+msgid "Remove Coating"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:804
+msgid "Add Coating"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:823
+msgid "Page"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:824
+msgid "Customer"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:825
+msgid "Details"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:827
+msgid "Comment"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:846 includes/3dprint-lite-frontend.php:263
+msgid "Printer"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:849 includes/3dprint-lite-frontend.php:275
+msgid "Material"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:852 includes/3dprint-lite-frontend.php:290
+msgid "Coating"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:861
 msgid "Model"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:555
+#: includes/3dprint-lite-admin.php:864
 msgid "Unit"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:568
+#: includes/3dprint-lite-admin.php:874 includes/3dprint-lite-frontend.php:79
+#: includes/3dprint-lite-frontend.php:219
+msgid "Estimated Price:"
+msgstr ""
+
+#: includes/3dprint-lite-admin.php:880
 msgid "Remove Request"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:573
+#: includes/3dprint-lite-admin.php:887
 msgid "Email:"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:574
+#: includes/3dprint-lite-admin.php:888
 msgid "Comment:"
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:578
+#: includes/3dprint-lite-admin.php:895
 msgid "Leave a comment or a payment link."
 msgstr ""
 
-#: includes/3dprint-lite-admin.php:591
+#: includes/3dprint-lite-admin.php:909
 msgid "Email Quotes"
 msgstr ""
 
-#: includes/3dprint-lite-frontend.php:26
+#: includes/3dprint-lite-frontend.php:36
 msgid "Please upload your model and select all options."
 msgstr ""
 
-#: includes/3dprint-lite-frontend.php:30
+#: includes/3dprint-lite-frontend.php:40
 msgid "Please enter valid email address."
 msgstr ""
 
-#: includes/3dprint-lite-frontend.php:60
+#: includes/3dprint-lite-frontend.php:73
 msgid "E-mail:"
 msgstr ""
 
-#: includes/3dprint-lite-frontend.php:61
+#: includes/3dprint-lite-frontend.php:74
 msgid "Product ID:"
 msgstr ""
 
-#: includes/3dprint-lite-frontend.php:71
+#: includes/3dprint-lite-frontend.php:87
 msgid "Manage Price Requests:"
 msgstr ""
 
-#: includes/3dprint-lite-frontend.php:76
+#: includes/3dprint-lite-frontend.php:92
 msgid ""
 "Store owner has been notified about your request. You'll receive the email "
 "with the price shortly."
 msgstr ""
 
-#: includes/3dprint-lite-frontend.php:78
+#: includes/3dprint-lite-frontend.php:94
 msgid "Could not send the email. Please try again later."
 msgstr ""
 
-#: includes/3dprint-lite-frontend.php:106
+#: includes/3dprint-lite-frontend.php:122
 msgid "Solid"
 msgstr ""
 
-#: includes/3dprint-lite-frontend.php:107
+#: includes/3dprint-lite-frontend.php:123
 msgid "Wireframe"
 msgstr ""
 
-#: includes/3dprint-lite-frontend.php:124
-#: includes/3dprint-lite-frontend.php:129
+#: includes/3dprint-lite-frontend.php:140
+#: includes/3dprint-lite-frontend.php:145
 msgid "Upload Model"
 msgstr ""
 
-#: includes/3dprint-lite-frontend.php:134
+#: includes/3dprint-lite-frontend.php:150
 msgid "File Unit:"
 msgstr ""
 
-#: includes/3dprint-lite-frontend.php:140
+#: includes/3dprint-lite-frontend.php:156
 msgid "inch"
 msgstr ""
 
-#: includes/3dprint-lite-frontend.php:154
-msgid "Filament Volume:"
+#: includes/3dprint-lite-frontend.php:172
+msgid "Material Volume:"
 msgstr ""
 
-#: includes/3dprint-lite-frontend.php:157
-#: includes/3dprint-lite-frontend.php:165
+#: includes/3dprint-lite-frontend.php:175
+#: includes/3dprint-lite-frontend.php:183
 msgid "cm3"
 msgstr ""
 
-#: includes/3dprint-lite-frontend.php:162
+#: includes/3dprint-lite-frontend.php:180
 msgid "Box Volume:"
 msgstr ""
 
-#: includes/3dprint-lite-frontend.php:170
+#: includes/3dprint-lite-frontend.php:188
+msgid "Surface Area:"
+msgstr ""
+
+#: includes/3dprint-lite-frontend.php:191
+msgid "cm2"
+msgstr ""
+
+#: includes/3dprint-lite-frontend.php:196
 msgid "Model Weight:"
 msgstr ""
 
-#: includes/3dprint-lite-frontend.php:173
+#: includes/3dprint-lite-frontend.php:199
 msgid "g"
 msgstr ""
 
-#: includes/3dprint-lite-frontend.php:178
+#: includes/3dprint-lite-frontend.php:204
 msgid "Model Dimensions:"
 msgstr ""
 
-#: includes/3dprint-lite-frontend.php:182
+#: includes/3dprint-lite-frontend.php:208
 msgid "cm"
 msgstr ""
 
-#: includes/3dprint-lite-frontend.php:193
-msgid "Estimated Price:"
-msgstr ""
-
-#: includes/3dprint-lite-frontend.php:217
+#: includes/3dprint-lite-frontend.php:245
 msgid "Enter Your E-mail"
 msgstr ""
 
-#: includes/3dprint-lite-frontend.php:218
+#: includes/3dprint-lite-frontend.php:246
 msgid "Leave a comment"
 msgstr ""
 
-#: includes/3dprint-lite-frontend.php:219
+#: includes/3dprint-lite-frontend.php:247
 msgid "Request a Quote"
 msgstr ""
 
-#: includes/config.js.php:15
+#: includes/3dprint-lite-functions.php:204
 msgid ""
 "<span id='printer_fit_error'><b>Error:</b> The model does not fit into the "
 "selected printer</span>"
 msgstr ""
 
-#: includes/config.js.php:16
+#: includes/3dprint-lite-functions.php:205
 msgid ""
 "<span id='printer_fit_warning'><b>Warning:</b> The model might not fit into "
 "the selected printer</span>"
 msgstr ""
 
-#: includes/config.js.php:17
+#: includes/3dprint-lite-functions.php:206
 msgid "<b>Warning:</b> Can't triangulate"
 msgstr ""
 
-msgid "Shortcode:"
+#: includes/3dprint-lite-functions.php:379
+msgid "Failed to open temp directory."
 msgstr ""
 
-msgid "Pricing"
+#: includes/3dprint-lite-functions.php:401
+msgid "Failed to open output stream."
 msgstr ""
 
-msgid "Surface Area:"
+#: includes/3dprint-lite-functions.php:406
+msgid "Failed to move uploaded file."
 msgstr ""
 
-msgid "Coatings"
+#: includes/3dprint-lite-functions.php:411
+#: includes/3dprint-lite-functions.php:415
+msgid "Failed to open input stream."
 msgstr ""
 
-msgid "Coating Name"
+#: includes/3dprint-lite-functions.php:466
+msgid "Model file not found."
 msgstr ""
 
-msgid "Coating Color"
+#: includes/3dprint-lite-functions.php:471
+msgid "Could not extract the file."
 msgstr ""
 
-msgid "Remove Coating"
-msgstr ""
-
-msgid "cm2 of surface area"
-msgstr ""
-
-msgid "Currency Position"
-
-msgid "Left with space"
-msgstr ""
-
-msgid "Right"
-msgstr ""
-
-msgid "Right with space"
-msgstr ""
-
-msgid "Number of Decimals"
-msgstr ""
-
-msgid "Thousands Separator"
-msgstr ""
-
-msgid "Decimal Point"
-msgstr ""
-
+#: includes/3dprint-lite-functions.php:475
 msgid "The server does not support zip archives."
 msgstr ""
 
-msgid "Delete files older than"
-msgstr ""
-
-msgid "days"
+#: includes/3dprint-lite-functions.php:486
+msgid "Extracted file is too large."
 msgstr ""

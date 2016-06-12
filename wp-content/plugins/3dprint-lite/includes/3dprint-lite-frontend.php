@@ -9,31 +9,28 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
+
+
 $p3dlite_email_status_message="";
 add_action( 'plugins_loaded', 'p3dlite_request_price' );
 function p3dlite_request_price() {
 	global $p3dlite_email_status_message;
-    global $bp;  
 	if ( isset( $_POST['action'] ) && $_POST['action']=='request_price' ) {
 		$product_id=(int)$_POST['p3dlite_product_id'];
 		$printer_id=(int)$_POST['attribute_pa_p3dlite_printer'];
 		$material_id=(int)$_POST['attribute_pa_p3dlite_material'];
 		$coating_id=(int)$_POST['attribute_pa_p3dlite_coating'];
-		$model_file=sanitize_file_name( basename( $_POST['attribute_pa_p3dlite_model'] ) );
+		$model_file= p3dlite_basename( $_POST['attribute_pa_p3dlite_model'] ) ;
 		$email_address = sanitize_email( $_POST['email_address'] );
-        
-		$printteri=(int)$_GET['printteri'];
-                
 		$request_comment = sanitize_text_field( $_POST['request_comment'] );
-		$maara = sanitize_text_field( $_POST['maara'] );
-        
-		$db_printers=get_option( 'p3dlite_printers' ); 
-		$db_materials=get_option( 'p3dlite_materials' ); 
 
+		$db_printers=get_option( 'p3dlite_printers' );
+		$db_materials=get_option( 'p3dlite_materials' );
 		$db_coatings=get_option( 'p3dlite_coatings' );
 		$settings=get_option( 'p3dlite_settings' );
 		$error=false;
 		$upload_dir = wp_upload_dir();
+
 		if ( strlen( $model_file )==0 || !file_exists( $upload_dir['basedir'].'/p3d/'.$model_file ) || strlen( $printer_id )==0 || strlen( $material_id )==0 ) {
 			$error=true;
 			$p3dlite_email_status_message='<span class="p3dlite-mail-error">'.__( 'Please upload your model and select all options.' , '3dprint-lite' ).'</span>';
@@ -54,81 +51,23 @@ function p3dlite_request_price() {
 
 					$p3dlite_price_requests[$product_key]['attributes'][$key]=$value;
 				}
+
 			}
+
 
 			$p3dlite_price_requests[$product_key]['price']='';
 			$p3dlite_price_requests[$product_key]['estimated_price']=(float)$_POST['p3dlite_estimated_price'];
 			$p3dlite_price_requests[$product_key]['email']=$email_address;
 			$p3dlite_price_requests[$product_key]['request_comment']=$request_comment;
- 
-			$hinta=(float)$_POST['p3dlite_estimated_price'];
-            
-			update_option( "p3dlite_price_requests", $p3dlite_price_requests ); 
+
+
+
+			update_option( "p3dlite_price_requests", $p3dlite_price_requests );
 
 			// $request_comment
 			$upload_dir = wp_upload_dir();
-			$link = $upload_dir['baseurl'].'/p3d/'.$model_file;
-            
-			$printteri=(int)$_GET['printteri'];
-
-                        $materiaali = get_post_meta($printteri, 'filamentit_lista_' . $material_id . '_filamentin_nimi', true);
-			$tulostinmalli = get_post_meta($printteri, 'tulostimet_' . $printer_id . '_tulostimen_malli', true);
-
-            		$tulostin = $printteri;
-
-            		$tilaajaid = get_current_user_id();
-
-            		$uusititle = time();
-
-            $newprintjob = array(
-			 'post_content'   => "",
-			 'post_title'     => $uusititle,
-			 'post_status'    => "publish",
-			 'post_type'      => "tulostuspyynto",
-			 'post_author'    => $tilaajaid,
-			 );  
-            $newprintjobid = wp_insert_post( $newprintjob);
-
-            $tulostinomistaja = get_post($printteri); 
-            $tulostinomistaja = $tulostinomistaja->post_author;
-            update_post_meta($newprintjobid, "tulostinomistaja", $tulostinomistaja);
-            update_post_meta($newprintjobid, "materiaali", $materiaali);
-            update_post_meta($newprintjobid, "tulostin", $tulostin);
-            update_post_meta($newprintjobid, "tulostinmalli", $tulostinmalli);
-            update_post_meta($newprintjobid, "tiedosto", $link);
-            update_post_meta($newprintjobid, "maara", $maara);
-            update_post_meta($newprintjobid, "hinta", $hinta);            
-            update_post_meta($newprintjobid, "kuvaus", $request_comment);
-            update_post_meta($newprintjobid, "tarjous", $maara*$hinta); 
-            update_post_meta($newprintjobid, "tila", "tarjous");
-
-            global $bp;  
-            $tulostuspyyntourl = "/tulostuspyynto/" . $uusititle . "/";
-
-	    $filename = $link;
-	    $parent_post_id = $newprintjobid;
-	    $filetype = wp_check_filetype( basename( $filename ), null );
-
-	    $attachment = array(
-	    		'guid'           => $link, 
-	    		'post_mime_type' => "application/sla",
-	    		'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $filename ) ),
-	    		'post_content'   => '',
-	    		'post_status'    => 'inherit'
-			);
-
-	    $attach_id = wp_insert_attachment( $attachment, $filename, $parent_post_id );
-
-	    require_once( ABSPATH . 'wp-admin/includes/image.php' );
-
-	    $attach_data = wp_generate_attachment_metadata( $attach_id, $filename );
-
-	    wp_update_attachment_metadata( $attach_id, $attach_data );
-            echo "<p>Uusi tulostuspyyntö on tehty ja voit muokata sitä osoitteessa " . $tulostuspyyntourl . "</p>"; 
-            echo "<script type='text/javascript'>                                                                                                           
-	    window.location.assign('" . $tulostuspyyntourl  . "?updated=true')
-	    </script>";
-            
+			$link = $upload_dir['baseurl'].'/p3d/'.urlencode($model_file);
+			//todo: email template
 			$subject=__( "Price enquiry from $email_address" , '3dprint-lite' );
 
 			$message=__( "E-mail:" , '3dprint-lite' ) ." $email_address <br>";
@@ -149,6 +88,13 @@ function p3dlite_request_price() {
 
 			$admin_email = get_option( 'admin_email' );
 			$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+			if ( wp_mail( $admin_email, $subject, $message, $headers ) )
+				$p3dlite_email_status_message='<span class="p3dlite-mail-success">'.__( 'Store owner has been notified about your request. You\'ll receive the email with the price shortly.' , '3dprint-lite' ).'</span>';
+			else
+				$p3dlite_email_status_message='<span class="p3dlite-mail-error">'.__( 'Could not send the email. Please try again later.' , '3dprint-lite' ).'</span>';
+
+			p3dlite_clear_cookies();
+			do_action( 'p3dlite_request_price' );
 		}
 	}
 }
@@ -167,21 +113,14 @@ function p3d_lite( $atts ) {
 	<div id="prompt">
 	  <!-- if IE without GCF, prompt goes here -->
 	</div>
-    
 
-    
-    <?php
-		$printteri=(int)$_GET['printteri'];
-    ?>
-    
-    
 
 	<div id="p3dlite-viewer">
 		<canvas id="p3dlite-cv" width="<?php echo $settings['canvas_width'];?>" height="<?php echo $settings['canvas_height'];?>" style="border: 1px solid;"></canvas>
-		<div id="canvas-stats">
+		<div id="canvas-stats" style="<?php if ($settings['canvas_stats']!='on') echo 'display:none;';?>">
 			<div class="canvas-stats">
-				<a style="color:red;text-decoration:underline;" href="javascript:void(0)" onclick="p3dlite_viewer.setRenderMode('flat');p3dlite_viewer.update();">Kiinteä</a> /
-				<a style="color:red;text-decoration:underline;" href="javascript:void(0)" onclick="p3dlite_viewer.setRenderMode('wireframe');p3dlite_viewer.update();">Ääriviivat</a>
+				<a style="color:red;text-decoration:underline;" href="javascript:void(0)" onclick="p3dlite_viewer.setRenderMode('flat');p3dlite_viewer.update();"><?php _e( 'Solid', '3dprint-lite' ); ?></a> /
+				<a style="color:red;text-decoration:underline;" href="javascript:void(0)" onclick="p3dlite_viewer.setRenderMode('wireframe');p3dlite_viewer.update();"><?php _e( 'Wireframe', '3dprint-lite' ); ?></a>
 			</div>
 			<div class="canvas-stats" id="p3dlite-statistics">
 			</div>
@@ -198,36 +137,39 @@ function p3d_lite( $atts ) {
 <?php
 	if (preg_match('/MSIE (.*?);/', $_SERVER['HTTP_USER_AGENT']) || preg_match('/Trident/', $_SERVER['HTTP_USER_AGENT'])) { 
 ?>
-	<button id="p3dlite-pickfiles" class="progress-button">Lataa malli!</button>
+	<button id="p3dlite-pickfiles" class="progress-button"><?php _e( 'Upload Model', '3dprint-lite' ); ?></button>
 <?php
 	}
 	else {
 ?>
-	<button id="p3dlite-pickfiles" class="progress-button" data-style="rotate-angle-bottom" data-perspective data-horizontal>Lataa malli</button>
+	<button id="p3dlite-pickfiles" class="progress-button" data-style="rotate-angle-bottom" data-perspective data-horizontal><?php _e( 'Upload Model', '3dprint-lite' ); ?></button>
 <?php
 	}
 ?>
 	<div class="p3dlite-info">
-Tiedoston mittayksikkö:		&nbsp;&nbsp;
+	<?php _e( 'File Unit:', '3dprint-lite' );?>
+		&nbsp;&nbsp;
 		<input class="p3dlite-control" autocomplete="off" id="unit_mm" onclick="p3dliteSelectUnit(this);" type="radio" name="p3dlite_unit" value="mm">
-		<span style="cursor:pointer;" onclick="p3dliteSelectUnit(jQuery('#unit_mm'));">Millimetriä</span>
+		<span style="cursor:pointer;" onclick="p3dliteSelectUnit(jQuery('#unit_mm'));"><?php _e( 'mm', '3dprint-lite' );?></span>
 		&nbsp;&nbsp;
 		<input class="p3dlite-control" autocomplete="off" id="unit_inch" onclick="p3dliteSelectUnit(this);" type="radio" name="p3dlite_unit" value="inch">
-		<span style="cursor:pointer;" onclick="p3dliteSelectUnit(jQuery('#unit_inch'));">Tuumaa</span>
+		<span style="cursor:pointer;" onclick="p3dliteSelectUnit(jQuery('#unit_inch'));"><?php _e( 'inch', '3dprint-lite' );?></span>
 	</div>
 
 	</div>
-	<pre id="p3dlite-console"></pre>
+	<div class="p3dlite-info">
+		<pre id="p3dlite-console"></pre>
+	</div>
 	<div id="p3dlite-filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
 	<div class="p3dlite-info">
 	  	<span id="p3dlite-error-message" class="error"></span>
 	</div>
-	<div class="p3dlite-info">
+	<div class="p3dlite-info" style="<?php if ($settings['model_stats']!='on') echo 'display:none;';?>">
 
-		<table class="p3dlite-stats">
+		<table class="p3dlite-stats" style="display:none;">
 			<tr>
 				<td>
-					Filamentin tilavuus:
+					<?php _e( 'Material Volume:', '3dprint-lite' );?>
 				</td>
 				<td>
 					<span id="stats-material-volume"></span> <?php _e( 'cm3', '3dprint-lite' );?>
@@ -235,7 +177,7 @@ Tiedoston mittayksikkö:		&nbsp;&nbsp;
 			</tr>
 			<tr>
 				<td>
-					Laatikon tilavuus:
+					<?php _e( 'Box Volume:', '3dprint-lite' );?>
 				</td>
 				<td>
 					<span id="stats-box-volume"></span> <?php _e( 'cm3', '3dprint-lite' );?>
@@ -243,7 +185,7 @@ Tiedoston mittayksikkö:		&nbsp;&nbsp;
 			</tr>
 			<tr>
 				<td>
-					Pinta-ala:
+					<?php _e( 'Surface Area:', '3dprint-lite' );?>
 				</td>
 				<td>
 					<span id="stats-surface-area"></span> <?php _e( 'cm2', '3dprint-lite' );?>
@@ -251,7 +193,15 @@ Tiedoston mittayksikkö:		&nbsp;&nbsp;
 			</tr>
 			<tr>
 				<td>
-					Mallin ulottuvuudet:
+					<?php _e( 'Model Weight:', '3dprint-lite' );?>
+				</td>
+				<td>
+					<span id="stats-weight"></span> <?php _e( 'g', '3dprint-lite' );?>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<?php _e( 'Model Dimensions:', '3dprint-lite' );?>
 				</td>
 				<td>
 					<span id="stats-length"></span> x <span id="stats-width"></span> x <span id="stats-height"></span>
@@ -266,7 +216,7 @@ Tiedoston mittayksikkö:		&nbsp;&nbsp;
 	<div id="price-wrapper">
 		<div id="price-container">
 			<p class="price">
-			        <?php if ( $settings['pricing']=='request_estimate' ) echo '<b>Arvioitu kappalehinta:</b>';?>
+			        <?php if ( $settings['pricing']=='request_estimate' ) echo '<b>'.__( 'Estimated Price:', '3dprint-lite' ).'</b>';?>
 				<span class="amount"></span>
 			</p>
 		</div>
@@ -285,7 +235,6 @@ Tiedoston mittayksikkö:		&nbsp;&nbsp;
 			<img alt="Loading price" src="<?php echo plugins_url( '3dprint-lite/images/ajax-loader.gif' ); ?>">
 		</div>
 
-             
 <?php
 	if ( !empty( $p3dlite_email_status_message ) ) echo '<div class="p3dlite-info">'.$p3dlite_email_status_message.'</div>';
 ?>
@@ -293,97 +242,56 @@ Tiedoston mittayksikkö:		&nbsp;&nbsp;
 			<div id="add-cart-container">
 				<div class="variations_button p3dlite-info">
 					<input type="hidden" value="request_price" name="action">
-					<input class="price-request-field" type="hidden" value="tomi@sange.fi" placeholder="tomi@sange.fi" name="email_address"><br>
-					<p>Kommentti tulostuspyynnöstä: <input class="price-request-field" type="text" value="" placeholder="Kommentti..." name="request_comment"></p><br>
-                    			<p>Tulostettava määrä: <input style="width:100px" min="1" class="price-request-field" type="number" value="1" placeholder="1" name="maara"></p><br>
-					<button style="float:left;" type="submit" class="button alt">Kysy hintaa!</button>
+					<input class="price-request-field" type="text" value="" placeholder="<?php _e( 'Enter Your E-mail', '3dprint-lite' );?>" name="email_address">
+					<input class="price-request-field" type="text" value="" placeholder="<?php _e( 'Leave a comment', '3dprint-lite' );?>" name="request_comment"><br>
+					<button style="float:left;" type="submit" class="button alt"><?php _e( 'Request a Quote', '3dprint-lite' ); ?></button>
 				</div>
 			</div>
 		</div>
 	</form>
 
-<?php	
-    $db_printers=get_option( 'p3dlite_printers' );
+<?php
+	$db_printers=get_option( 'p3dlite_printers' );
 	$db_materials=get_option( 'p3dlite_materials' );
 	$db_coatings=get_option( 'p3dlite_coatings' );
 ?>
 
-	<div class="p3dlite-info">
+
+
+	<div <?php if ($settings['show_printers']!='on') echo 'style="display:none;"';?> class="p3dlite-info">
 		<fieldset id="printer_fieldset" class="p3dlite-fieldset">
-			<legend>Tulostin</legend>
+			<legend><?php _e( 'Printer', '3dprint-lite' );?></legend>
 			<ul class="p3dlite-list">
-  
-<?php                
-  
-    unset($db_printers);
-    
-    $printteri=(int)$_GET['printteri'];
-?>                
-                
 <?php
-
-
-
-    $printteri_numero = 0;
-    $tulostimen_malli = get_post_meta($printteri, 'tulostimet_' . $printteri_numero . '_tulostimen_malli', true);
-
-    while(!empty($tulostimen_malli)) {
-    $tulostimen_malli = get_post_meta($printteri, 'tulostimet_' . $printteri_numero . '_tulostimen_malli', true);
-    $tulostimen_pituus = get_post_meta($printteri, 'tulostimet_' . $printteri_numero . '_tulostimesi_pituus', true);
-    $tulostimen_leveys = get_post_meta($printteri, 'tulostimet_' . $printteri_numero . '_tulostimesi_leveys', true);
-    $tulostimen_korkeus = get_post_meta($printteri, 'tulostimet_' . $printteri_numero . '_tulostimesi_korkeus', true);
-    $tulostimen_hinta = get_post_meta($printteri, 'tulostimet_' . $printteri_numero . '_tulostimesi_hinta', true);
-    if(!empty($tulostimen_malli)) {
-                        echo '<li onclick="p3dliteSelectPrinter(this);" data-name="'.esc_attr($tulostimen_malli).'"><input id="p3dlite_printer_' . $printteri_numero . '" class="p3dlite-control" autocomplete="off" data-width="'.$tulostimen_leveys.'" data-length="'.$tulostimen_pituus.'" data-height="'.$tulostimen_korkeus.'" data-id="'.$printteri_numero.'" data-price="'.esc_attr( $tulostimen_hinta ).'" data-price_type="material_volume" type="radio" name="product_printer">'.$tulostimen_malli.'</li>';
-    }
-    $printteri_numero++;
-    }
+		for ( $i=0;$i<count( $db_printers );$i++ ) {
+			echo '<li onclick="p3dliteSelectPrinter(this);" data-name="'.esc_attr( $db_printers[$i]['name'] ).'"><input id="p3dlite_printer_'.$i.'" class="p3dlite-control" autocomplete="off" data-width="'.$db_printers[$i]['width'].'" data-length="'.$db_printers[$i]['length'].'" data-height="'.$db_printers[$i]['height'].'" data-id="'.$i.'" data-materials="'.(count($db_printers[$i]['materials']) ? implode(',', $db_printers[$i]['materials'] ) : '').'" data-price="'.esc_attr( $db_printers[$i]['price'] ).'" data-price_type="'.$db_printers[$i]['price_type'].'" type="radio" name="product_printer">'.__($db_printers[$i]['name'], '3dprint-lite').'</li>';
+		}
 ?>
-                
 		  	</ul>
 	  	</fieldset>
 	</div>
-
-    <?php 
-        
-    unset($db_materials);
-        
-    $filament_price_type = "cm3";
-    
-    unset($db_materials);
-?>    
-    
-	<div class="p3dlite-info">
+	<div <?php if ($settings['show_materials']!='on') echo 'style="display:none;"';?> class="p3dlite-info">
 		<fieldset id="material_fieldset" class="p3dlite-fieldset">
-			<legend>Filamentti</legend>
+			<legend><?php _e( 'Material', '3dprint-lite' );?></legend>
 			<ul class="p3dlite-list">
 <?php
-    $filamentit_numero = 0;
-    $filamentin_nimi = get_post_meta($printteri, 'filamentit_lista_' . $filamentit_numero . '_filamentin_nimi', true);
-    while(!empty($filamentin_nimi)) {
-    $filamentin_nimi = get_post_meta($printteri, 'filamentit_lista_' . $filamentit_numero . '_filamentin_nimi', true);
-    $filamentin_hinta = get_post_meta($printteri, 'filamentit_lista_' . $filamentit_numero . '_filamenttisi_hinta', true);    
-    $filamentin_vari = get_post_meta($printteri, 'filamentit_lista_' . $filamentit_numero . '_filamentin_vari', true);
-    if(!empty($filamentin_nimi)) {
-    echo '<li data-color="' . $filamentin_vari . '" data-name="' . $filamentin_nimi . '" onclick="p3dliteSelectFilament(this);"><input id="p3dlite_material_' . $filamentit_numero . '" class="p3dlite-control" autocomplete="off" type="radio" data-id="' . $filamentit_numero . '" data-density="1" data-price="'.esc_attr($filamentin_hinta).'" data-price_type="cm3" name="product_filament" ><div style="background-color:' . $filamentin_vari . '" class="color-sample"></div>' . $filamentin_nimi . '</li>';
-    }
-    $filamentit_numero++;
-    }
-
+		for ( $i=0;$i<count( $db_materials );$i++ ) {
+			echo '<li data-color=\''.$db_materials[$i]['color'].'\' data-name="'.esc_attr( $db_materials[$i]['name'] ).'" onclick="p3dliteSelectFilament(this);"><input id="p3dlite_material_'.$i.'" class="p3dlite-control" autocomplete="off" type="radio" data-id="'.$i.'" data-density="'.esc_attr( $db_materials[$i]['density'] ).'" data-price="'.esc_attr( $db_materials[$i]['price'] ).'" data-price_type="'.$db_materials[$i]['price_type'].'" name="product_filament" ><div style="background-color:'.$db_materials[$i]['color'].'" class="color-sample"></div>'.__($db_materials[$i]['name'], '3dprint-lite').'</li>';
+		}
 ?>
-            </ul>
+			</ul>
 		</fieldset>
 	</div>
 <?php 
 if ($db_coatings && count($db_coatings)>0) {
 ?>
-	<div class="p3dlite-info">
+	<div <?php if ($settings['show_coatings']!='on') echo 'style="display:none;"';?> class="p3dlite-info">
 		<fieldset id="coating_fieldset" class="p3dlite-fieldset">
 			<legend><?php _e( 'Coating', '3dprint-lite' );?></legend>
 			<ul class="p3dlite-list">
 <?php
 		for ( $i=0;$i<count( $db_coatings );$i++ ) {
-			echo '<li data-color=\''.$db_coatings[$i]['color'].'\' data-name="'.esc_attr( $db_coatings[$i]['name'] ).'" onclick="p3dliteSelectCoating(this);"><input id="p3dlite_coating_'.$i.'" class="p3dlite-control" autocomplete="off" type="radio" data-id="'.$i.'"  data-price="'.esc_attr( $db_coatings[$i]['price'] ).'" name="product_coating" ><div style="background-color:'.$db_coatings[$i]['color'].'" class="color-sample"></div>'.$db_coatings[$i]['name'].'</li>';
+			echo '<li data-color=\''.$db_coatings[$i]['color'].'\' data-name="'.esc_attr( $db_coatings[$i]['name'] ).'" onclick="p3dliteSelectCoating(this);"><input id="p3dlite_coating_'.$i.'" class="p3dlite-control" autocomplete="off" type="radio" data-id="'.$i.'"  data-materials="'.(count($db_coatings[$i]['materials']) ? implode(',', $db_coatings[$i]['materials'] ) : '').'" data-price="'.esc_attr( $db_coatings[$i]['price'] ).'" name="product_coating" ><div style="background-color:'.$db_coatings[$i]['color'].'" class="color-sample"></div>'.__($db_coatings[$i]['name'], '3dprint-lite').'</li>';
 		}
 ?>
 			</ul>

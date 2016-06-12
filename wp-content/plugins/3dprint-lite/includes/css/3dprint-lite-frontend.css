@@ -1,7 +1,9 @@
 div.color-sample {
 	width:30px;
 	height:20px;
-	display:inline-block
+	display:inline-block;
+        vertical-align: middle;
+        margin-right:3px;
 }
 
 ul.p3dlite-list {
@@ -190,4 +192,6 @@ div.p3dlite-details {
 .p3dlite-control {
     display: inline;
     height: auto;
+    vertical-align: middle;
+    margin-right:3px;
 }
